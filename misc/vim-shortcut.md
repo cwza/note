@@ -1,0 +1,22 @@
+# Vim Shortcut
+
+- Ctrl-E, Ctrl-Y: Scroll without move cursor
+- Ctrl-a, Ctrl-x: increase decrease number
+- f, F, t, T: find or to next character
+    - ;: next ,: previous
+- Ctrl-o, Ctrl-i: jump to previous
+- u, Ctrl-R: undo, redo
+- D: delete to the end, C: delete to the end and enter insert mode
+- dd: delete the whole line, cc: delete the whole line and enter insert mode
+- *: search current word
+- .: repeat previous
+- gUw: upper case a word, guw: lower case a word
+- vi(: select all words inside(),  va(: select all words inside() include (),  i is for inside, a is for around
+- :%s/xx/yy/g: replace all xx with yy,  :%s/xx/yy/gc: ask for confirm, %s/xx/yy/gi: ignore case
+- %: match parenthesis, bracket
+- qa[]q: to make a macro to register a,  @a to do the macro in register a, you can use . to repeat
+- Ctrl-o: press this in insert mode will let you back to normal mode once and return insert mode.
+- Ctrl-w: press this in insert mode will delete the previous word.
+- S: go to auto indent position
+- visual mode to select multiple lines, then :norm I[] to add something to the beginning, also you can use :norm A[] to add something to the end
+- visual mode to select multiple lines, then :! sort | uniq will run sort and uniq on what you select
