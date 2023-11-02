@@ -1,5 +1,6 @@
 # Vim Shortcut
 
+- Visual mode press U: Upper case, u: Lower case , Normal or Visual mode press ~: Toggle case
 - Ctrl-E, Ctrl-Y: Scroll without move cursor
 - Ctrl-a, Ctrl-x: increase decrease number
 - f, F, t, T: find or to next character
@@ -20,3 +21,4 @@
 - S: go to auto indent position
 - visual mode to select multiple lines, then :norm I[] to add something to the beginning, also you can use :norm A[] to add something to the end
 - visual mode to select multiple lines, then :! sort | uniq will run sort and uniq on what you select
+- insert mode press C-r then "(or other register) to paste in insert mode
