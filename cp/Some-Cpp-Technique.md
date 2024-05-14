@@ -31,3 +31,29 @@ sort(divisors.begin(), divisors.end());
 divisors.resize(unique(divisors.begin(), divisors.end())-divisors.begin());
 for(int divisor : divisors) cout << divisor << " "; // 1,2,3
 ```
+
+## Split
+``` cpp
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define ar array
+
+vector<string> tokenize(string const &str, const string delim) {
+    size_t start;
+    size_t end = 0;
+    vector<string> out;
+    while ((start = str.find_first_not_of(delim, end)) != std::string::npos) {
+        end = str.find(delim, start);
+        out.push_back(str.substr(start, end - start));
+    }
+    return out;
+}
+ 
+
+int main() {
+    string s = "as bb cc";
+    auto tokens = tokenize(s, " ");
+    for(auto token : tokens) cout << token << " "; // aa bb cc 
+}
+```
