@@ -123,7 +123,7 @@
 #endif
 ```
 
-- Makefile
+## Makefile
 ```makefile
 fname=main
 c:
@@ -144,7 +144,24 @@ r:
 - brew intall bear
 - `bear -- make` to generate compile_commands.json
 
-## Basic template for cp
+-------------------------
+
+# Linux C++
+
+## Makefile
+```makefile
+c:
+	g++ "$(fname).cpp" -o $(fname).out -std=c++17 -Wall -Wextra -Wshadow -Wfloat-equal -D_GLIBCXX_DEBUG -fsanitize=undefined
+co: 
+	g++ "$(fname).cpp" -o $(fname).out -std=c++17 -O2
+cd: 
+	clang++ "$(fname).cpp" --debug -o $(fname).out -std=c++17 -Wall -Wextra -Wshadow -Wfloat-equal -D_GLIBCXX_DEBUG -fsanitize=undefined
+r:
+	./$(fname).out
+```
+
+
+# Basic template for cp
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
