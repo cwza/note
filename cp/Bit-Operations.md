@@ -1,5 +1,8 @@
 # Bit Operations
 
+## Neat fact
+* A xor B = (A or B) - (A and B)
+
 ## Basic functions
 - __builtin_clz(*x*): the number of zeros at the beginning of the number
 - __builtin_ctz(*x*): the number of zeros at the end of the number
