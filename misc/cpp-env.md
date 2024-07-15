@@ -1,170 +1,72 @@
 [[toc]]
 
-# Mac M1 C++
+# Linux Cpp Environment for Competitive Programming
 
-## Use bits/stdc++ in clang
-- add the following file to /Users/cwza/cwza/cp/include/bits/stdc++.h
-```cpp
-// C++ includes used for precompiling -*- C++ -*-
-
-// Copyright (C) 2003-2014 Free Software Foundation, Inc.
-//
-// This file is part of the GNU ISO C++ Library.  This library is free
-// software; you can redistribute it and/or modify it under the
-// terms of the GNU General Public License as published by the
-// Free Software Foundation; either version 3, or (at your option)
-// any later version.
-
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// Under Section 7 of GPL version 3, you are granted additional
-// permissions described in the GCC Runtime Library Exception, version
-// 3.1, as published by the Free Software Foundation.
-
-// You should have received a copy of the GNU General Public License and
-// a copy of the GCC Runtime Library Exception along with this program;
-// see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
-// <http://www.gnu.org/licenses/>.
-
-/** @file stdc++.h
- *  This is an implementation file for a precompiled header.
- */
-
-// 17.4.1.2 Headers
-
-// C
-#ifndef _GLIBCXX_NO_ASSERT
-#include <cassert>
-#endif
-#include <cctype>
-#include <cerrno>
-#include <cfloat>
-#include <ciso646>
-#include <climits>
-#include <clocale>
-#include <cmath>
-#include <csetjmp>
-#include <csignal>
-#include <cstdarg>
-#include <cstddef>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <ctime>
-
-#if __cplusplus >= 201103L
-#include <ccomplex>
-#include <cfenv>
-#include <cinttypes>
-#include <cstdbool>
-#include <cstdint>
-#include <ctgmath>
-#include <cwchar>
-#include <cwctype>
-#endif
-
-// C++
-#include <algorithm>
-#include <bitset>
-#include <complex>
-#include <deque>
-#include <exception>
-#include <fstream>
-#include <functional>
-#include <iomanip>
-#include <ios>
-#include <iosfwd>
-#include <iostream>
-#include <istream>
-#include <iterator>
-#include <limits>
-#include <list>
-#include <locale>
-#include <map>
-#include <memory>
-#include <new>
-#include <numeric>
-#include <ostream>
-#include <queue>
-#include <set>
-#include <sstream>
-#include <stack>
-#include <stdexcept>
-#include <streambuf>
-#include <string>
-#include <typeinfo>
-#include <utility>
-#include <valarray>
-#include <vector>
-
-#if __cplusplus >= 201103L
-#include <array>
-#include <atomic>
-#include <chrono>
-#include <condition_variable>
-#include <forward_list>
-#include <future>
-#include <initializer_list>
-#include <mutex>
-#include <random>
-#include <ratio>
-#include <regex>
-#include <scoped_allocator>
-#include <system_error>
-#include <thread>
-#include <tuple>
-#include <typeindex>
-#include <type_traits>
-#include <unordered_map>
-#include <unordered_set>
-#endif
+## cp.sh
+``` sh
+g++ "${1:-main}.cpp" -o "${1:-main}" -std=c++17 -ggdb3 -Wall -Wextra -Wshadow -Wfloat-equal -D_GLIBCXX_DEBUG -D_GLIBCXX_ASSERTIONS -DDEBUG -fsanitize=undefined -fmax-errors=2
 ```
 
 ## Makefile
-```makefile
-fname=main
-c:
-	clang++ "$(fname).cpp" -o $(fname).out -std=c++17 -Wall -Wextra -Wshadow -Wfloat-equal -D_GLIBCXX_DEBUG -fsanitize=undefined -I/Users/cwza/cwza/cp/include
-co: 
-	clang++ "$(fname).cpp" -o $(fname).out -std=c++17 -O2 -I/Users/cwza/cwza/cp/include
+``` makefile
+f=main
+c: 
+	g++ "$(f).cpp" -o "$(f)" -std=c++17 -Wall -Wextra -Wshadow -Wfloat-equal -D_GLIBCXX_DEBUG -D_GLIBCXX_ASSERTIONS -DDEBUG -fsanitize=undefined -fmax-errors=2
+co:
+	g++ "$(f).cpp" -o "$(f)" -std=c++17 -O2 -Wall -Wextra -Wshadow -Wfloat-equal -D_GLIBCXX_DEBUG -D_GLIBCXX_ASSERTIONS -DDEBUG -fsanitize=undefined -fmax-errors=2
 cd: 
-	clang++ "$(fname).cpp" --debug -o $(fname).out -std=c++17 -Wall -Wextra -Wshadow -Wfloat-equal -D_GLIBCXX_DEBUG -fsanitize=undefined -I/Users/cwza/cwza/cp/include
-cg: 
-	g++-13 "$(fname).cpp" -o $(fname).out -std=c++17 -Wall -Wextra -Wshadow -Wfloat-equal -D_GLIBCXX_DEBUG
-cgo:
-	g++-13 "$(fname).cpp" -o $(fname).out -std=c++17 -O2
+	g++ "$(f).cpp" -o "$(f)" -std=c++17 -ggdb3 -Wall -Wextra -Wshadow -Wfloat-equal -D_GLIBCXX_DEBUG -D_GLIBCXX_ASSERTIONS -DDEBUG -fsanitize=undefined -fmax-errors=2
 r:
-	./$(fname).out
+	./$(f)
 ```
 
-## Config for Clangd
-- brew intall bear
-- `bear -- make` to generate compile_commands.json
+## debug.hpp
+``` cpp
+#include <bits/stdc++.h>
+using namespace std;
 
--------------------------
+int recur_depth = 0;
+#define dbg(x) {++recur_depth; auto x_=x; --recur_depth; cerr<<string(recur_depth, '\t')<<"\e[91m"<<__func__<<":"<<__LINE__<<"\t"<<#x<<" = "<<x_<<"\e[39m"<<endl;}
 
-# Linux C++
+// pretty cout pair
+template<typename Ostream, typename ...Ts>
+Ostream& operator<<(Ostream& os,  const pair<Ts...>& p){
+	return os<<"("<<p.first<<", "<<p.second<<")";
+}
 
-## Makefile
-```makefile
-c:
-	g++ "$(fname).cpp" -o $(fname).out -std=c++17 -Wall -Wextra -Wshadow -Wfloat-equal -D_GLIBCXX_DEBUG -fsanitize=undefined
-co: 
-	g++ "$(fname).cpp" -o $(fname).out -std=c++17 -O2
-cd: 
-	clang++ "$(fname).cpp" --debug -o $(fname).out -std=c++17 -Wall -Wextra -Wshadow -Wfloat-equal -D_GLIBCXX_DEBUG -fsanitize=undefined
-r:
-	./$(fname).out
+// pretty cout tuple
+template<typename Ostream, class TupType, size_t... I>
+void print_tuple(Ostream& os, const TupType& _tup, index_sequence<I...>)
+{
+    os << "(";
+    (..., (os << (I == 0? "" : ", ") << get<I>(_tup)));
+    os << ")";
+}
+template<typename Ostream, class... T>
+Ostream& operator<<(Ostream& os, const std::tuple<T...>& _tup)
+{
+    print_tuple(os, _tup, std::make_index_sequence<sizeof...(T)>());
+    return os;
+}
+
+// pretty cout container
+template<typename Ostream, typename Cont>
+enable_if_t<is_same_v<Ostream,ostream>, Ostream&> operator<<(Ostream& os,  const Cont& v){
+	os<<"[";
+	for(auto& x:v){os<<x<<", ";}
+	return os<<"]";
+}
 ```
 
-
-# Basic template for cp
+## main.cpp
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
+#ifdef DEBUG
+    #include "debug.hpp"
+#else
+    #define dbg(x)
+#endif
 using ll = long long;
 
 void solve() {}

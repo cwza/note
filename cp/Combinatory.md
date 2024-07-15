@@ -6,6 +6,8 @@
 - [D - Knight (atcoder.jp)](https://atcoder.jp/contests/abc145/tasks/abc145_d)
 ```cpp
 long long choose(long long n, long long k) {
+    if(n<0 || k<0 || n<k) return 0;
+    if(k==0) return 1;
     long long res = 1;
     for(int i = 1; i <= k; i++) {
         res *= n-k+i;
@@ -15,6 +17,8 @@ long long choose(long long n, long long k) {
 }
 
 long long modchoose(long long n, long long k, long long modN) {
+    if(n<0 || k<0 || n<k) return 0;
+    if(k==0) return 1;
     long long res = 1;
     for(int i = 1; i <= k; i++) {
         res = res * (n-k+i) % modN;
@@ -48,6 +52,8 @@ ll mod_inv(ll a) {
 }
 
 ll choose(ll n, ll k) {
+    if(n<0 || k<0 || n<k) return 0;
+    if(k==0) return 1;
     return fact[n]*fact_inv[k]%modN*fact_inv[n-k]%modN;
 }
 

@@ -20,17 +20,22 @@ int main() {
 ``` sh
 g++ main.cpp -o main.out -std=c++17 -g
 gdb main.out # Debug a.out
+tui enable # enable ui mode
 br main.cpp:12 # Set break point at main.cpp line 12
-run # Start the program
+start # start the program until main
+run # Start the program until breakpoint
 f # See the current exec line
 p aa # Print the aa array
 p va[0] # Print the first element of va
 p ma[0]
 p *sa.begin()
 br main.cpp:13 # Add another break point
+jump # jump to a line number
 next # Go to the next line
 nexti # Go to the next asm line
 step # Step into function
+up # move up stack
+down # move down stack
 q # Exit
 ```
 

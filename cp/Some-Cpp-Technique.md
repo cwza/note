@@ -57,3 +57,17 @@ int main() {
     for(auto token : tokens) cout << token << " "; // aa bb cc 
 }
 ```
+
+## Recursive Lambda
+``` cpp
+int main() {
+    int n;
+    vector<vector<int>> adj(n, vector<int>());
+    auto dfs = [&](self &self, int u) -> void {
+        for(auto v : adj[u]) {
+            if(!vis[v]) self(self, v);
+        }
+    }
+    dfs(dfs, 0);
+}
+```

@@ -149,3 +149,44 @@ int main() {
     }
 }
 ```
+
+## Find Centroid of Tree
+* A centroid of a tree is defined as a node such that when the tree is rooted at it, no other nodes have a subtree of size greater than n/2
+* run dfs from root, if node has any subtree that size greater than n/2 dfs such subtree, else it is the centroid
+* Problems
+    + https://atcoder.jp/contests/abc362/tasks/abc362_f
+``` cpp
+int n;
+const int maxN = 2e5;
+vector<int> adj[maxN];
+int cnt[maxN];
+int centroid;
+
+void dfs(int u, int p) {
+    cnt[u] = 1;
+    for(int v : adj[u]) {
+        if(v==p) continue;
+        dfs(v, u);
+        cnt[u] += cnt[v];
+    }
+}
+
+void dfs2(int u, int p) {
+    bool ok = 1;
+    for(int v : adj[u]) {
+        if(v==p) continue;
+        if(cnt[v]>n/2) {
+            ok = 0;
+            dfs2(v, u);
+        }
+    }
+    if(ok) {
+        centroid = u;
+    }
+}
+int main() {
+    dfs(0, -1); // find subtree size for each node
+    dfs2(0, -1); // find centroid
+    dbg(centroid);
+}
+```
