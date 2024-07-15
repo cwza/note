@@ -152,6 +152,10 @@ int main() {
 
 ## Find Centroid of Tree
 * A centroid of a tree is defined as a node such that when the tree is rooted at it, no other nodes have a subtree of size greater than n/2
+* Properties:
+    + The number of centroids is always >= 1 and <= 2
+    + If there are 2 centroids, they must be adjacent to each other, and they must form a subtree that has exactly 1/n nodes.
+    + If C is the centroid of a tree, the sum of all other verticies to C is minimum.
 * run dfs from root, if node has any subtree that size greater than n/2 dfs such subtree, else it is the centroid
 * Problems
     + https://atcoder.jp/contests/abc362/tasks/abc362_f
