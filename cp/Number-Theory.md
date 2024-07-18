@@ -31,8 +31,12 @@ for(int i = 1; i*i <= M; i++) {
 sort(factor.begin(), factor.end());
 ```
 
-## Find all factors of 1 … N in O(NloglogN)
-add 2 to all 2's multiplier, add 3 to all 3's multiplier, .....etc
+## Find all factors of 1 … N in O(NlogN)
+* Idea: add 1 to all 1's multiplier, add 2 to all 2's multiplier, add 3 to all 3's multiplier, .....etc
+* Why O(NlogN)
+    + n/1 + n/2 + n/3 + ... + n/n = n(1/n + 1/2 + 1/3 + .... + 1/n)
+    + 1/n + 1/2 + ... + 1/n <= integrate 1/x from 1 to n = logn
+    + n/1 + n/2 + ... + n/n <= nlogn = O(nlogn)
 ```cpp
 // factors[1] = {1}, factors[2] = {1,2}, factors[6] = {1,2,3,6}
 const int maxN = 1e5;
@@ -45,7 +49,7 @@ for(int i = 1; i <= maxN; i++) {
 }
 ```
 
-## Prime factorization
+## Prime factorization O(square_root(n))
 ```cpp
 vector<array<int, 2>> ans;
 for(int i = 2; i*i <= N; i++ {
@@ -59,7 +63,7 @@ for(int i = 2; i*i <= N; i++ {
 if(N>1) ans.push_back(N, 1);
 ```
 
-## Find primes by sieve (nloglogn)
+## Find primes by sieve (nlogn)
 ```cpp
 const int n = 20;
 int sieve[n+1];
@@ -74,9 +78,9 @@ for (int x = 2; x <= n; x++) {
 // 0  0  2  0  3  0  2  3  5  0  3  0  7  5  2  0  3  0  5
 ```
 
-## Find all primes in logN by modified sieve
+## Find all prime factors of X in logN by modified sieve
 ```cpp
-// precompute lpf[i]: smallest prime factor for i
+// precompute lpf[i] in O(nlogn): smallest prime factor for i
 const int maxX = 1e7;
 int spf[maxX+1];
 for(int i = 2; i <= maxX; i++) {
@@ -87,7 +91,7 @@ for(int i = 2; i <= maxX; i++) {
     }
 }
 
-// get all primes of x in logN
+// get all prime factors of X in logX
 int x = 1500;
 set<int> primes;
 while(x>1) {

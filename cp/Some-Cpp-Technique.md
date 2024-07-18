@@ -63,11 +63,24 @@ int main() {
 int main() {
     int n;
     vector<vector<int>> adj(n, vector<int>());
-    auto dfs = [&](self &self, int u) -> void {
+    auto dfs = [&](auto &self, int u) -> void {
         for(auto v : adj[u]) {
             if(!vis[v]) self(self, v);
         }
     }
     dfs(dfs, 0);
 }
+```
+
+## Others
+### Find smallest 2 values in array
+``` cpp
+vector<int> as = {4, 5, 3, 7, 1, 2};
+const int MAX = 2e9;
+int mn2 = MAX , mn1 = MAX;
+for(int a : as) {
+    mn2 = min(mn2, a);
+    if(mn2<mn1) swap(mn1, mn2);
+}
+// mn1 == 1, mn2 == 2;
 ```
