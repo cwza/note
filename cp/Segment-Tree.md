@@ -7,101 +7,91 @@
 - O(logN) for update and query
 
 ## Point Update + Range Query
-- [CSES - Dynamic Range Minimum Queries](https://cses.fi/problemset/task/1649/)
+- [CSES - Dynamic Range Sum Queries](https://cses.fi/problemset/result/10016275/)
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
+#ifdef DEBUG
+    #include "debug.hpp"
+#else
+    #define dbg(x)
+#endif
 using ll = long long;
-
-const int inf = 1e9+7;
 
 struct SegmentTree {
     int n;
     vector<ll> tree;
-    SegmentTree(vector<int> &inp) {
+    SegmentTree(vector<int> inp) {
         n = inp.size();
         while(__builtin_popcount(n)!=1) n++;
-        tree.resize(2*n, inf); // change this
-        for(int i = 0; i < n; i++) tree[n+i] = inp[i];
-        for(int i = n-1; i >= 1; i--) tree[i] = min(tree[2*i], tree[2*i+1]); // change this
+        tree.resize(2*n);
+        for(int i = 0; i < n && i < (int)inp.size(); i++) tree[n+i] = inp[i];
+        for(int i = n-1; i >= 1; i--) tree[i] = tree[2*i] + tree[2*i+1]; // change this
     }
     ll _query(int node, int node_l, int node_r, int query_l, int query_r) {
+        if(node_r<query_l || node_l>query_r) { // node disjoint query
+            return 0;
+        }
         if(node_l>=query_l && node_r<=query_r) { // query full cover node
             return tree[node];
-        }
-        if(node_r<query_l || node_l>query_r) { // node disjoint query
-            return inf; // change this
         }
         int mid = (node_l + node_r)/2;
         ll ansl = _query(2*node, node_l, mid, query_l, query_r);
         ll ansr = _query(2*node+1, mid+1, node_r, query_l, query_r);
-        return min(ansl, ansr); // change this
+        return ansl + ansr;
     }
     void _update(int node, int node_l, int node_r, int query_l, int query_r, int val) {
-        // recursive version
-        if(node_l>=query_l && node_r<=query_r) { // leaf
-            tree[node] = val;
+        if(node_r<query_l || node_l>query_r) {
             return;
         }
-        if(node_r<query_l || node_l>query_r) {
+        if(node_l>=query_l && node_r<=query_r) {
+            tree[node] = val;
             return;
         }
         int mid = (node_l + node_r)/2;
         _update(2*node, node_l, mid, query_l, query_r, val);
         _update(2*node+1, mid+1, node_r, query_l, query_r, val);
-        tree[node] = min(tree[2*node], tree[2*node+1]); // change this
-    }
-    ll _query2(int l, int r) {
-        // bottom up version
-        l += n; r += n;
-        ll ans = inf; // change this
-        while(l <= r) {
-            if(l%2==1) ans = min(ans, tree[l++]); // change this
-            if(r%2==0) ans = min(ans, tree[r--]); // change this
-            l /= 2; r /= 2;
-        }
-        return ans;
-    }
-    void _update2(int i, int val) {
-        // bottom up version
-        i += n;
-        tree[i] = val;
-        while(i/2) {
-            i/=2;
-            tree[i] = min(tree[2*i], tree[2*i+1]); // change this
-        }
+        tree[node] = tree[2*node] + tree[2*node+1];
     }
     ll query(int l, int r) {
-        // return _query(1, 0, n-1, l, r);
-        return _query2(l, r);
+        return _query(1, 0, n-1, l, r);
     }
-    void update(int i, int val) {
-        // return _update(1, 0, n-1, i, i, val);
-        return _update2(i, val);
+    void update(int l, int val) {
+        return _update(1, 0, n-1, l, l, val);
     }
 };
 
-int main() {
-    int N, Q;
-    cin >> N >> Q;
-    vector<int> inp(N);
-    for(int i = 0; i < N; i++) cin >> inp[i];
 
-    auto segtree = SegmentTree(inp);
-    while(Q--) {
-        int mode;
-        cin >> mode;
+void solve() {
+    int n, q;
+    cin >> n >> q;
+    vector<int> inp(n);
+    for(int i = 0; i < n; i++) cin >> inp[i];
+    
+    SegmentTree segtree(inp);
+    while(q--) {
+        int mode, a, b;
+        cin >> mode >> a >> b;
         if(mode==1) {
-            int k, u;
-            cin >> k >> u;
-            k--;
-            segtree.update(k, u);
+            a--;
+            segtree.update(a, b);
         } else {
-            int a, b;
-            cin >> a >> b;
             a--; b--;
             cout << segtree.query(a, b) << "\n";
         }
+    }
+}
+ 
+bool multi = 0;
+int main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+ 
+    int t = 1;
+    if (multi)
+        cin >> t;
+    for (int i = 0; i < t; i++) {
+        solve();
     }
 }
 ```
@@ -297,6 +287,13 @@ int main() {
     }
 }
 ```
+
+## Range Query the smallest value and it's frequency
+* SegmentNode stores {smallest value, freguency}
+* When combine 2 segment use following logic
+    + if(smallest value of left segment == smallest value of right segment) return {smallest value of left, sum of freguency}
+    + else return min(left segement, right segment)
+* When add x to segement, just add x to the smallest value and frequency remains the same.
 
 ## Solve Subtree Query by RMQ
 - [CSES - Subtree Queries](https://cses.fi/problemset/task/1137)
