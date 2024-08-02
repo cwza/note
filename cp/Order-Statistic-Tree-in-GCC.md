@@ -14,11 +14,13 @@ int main() {
     X.insert(8);
     X.insert(16);
 
+    // find the k+1th
     cout<<*X.find_by_order(1)<<endl; // 2
     cout<<*X.find_by_order(2)<<endl; // 4
     cout<<*X.find_by_order(4)<<endl; // 16
     cout<<(end(X)==X.find_by_order(6))<<endl; // true
 
+    // find the number which < k
     cout<<X.order_of_key(-5)<<endl;  // 0
     cout<<X.order_of_key(1)<<endl;   // 0
     cout<<X.order_of_key(3)<<endl;   // 2

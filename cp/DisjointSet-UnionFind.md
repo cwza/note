@@ -3,7 +3,7 @@
 ```cpp
 struct DST {
     vector<int> sz, lk;
-		int total_sz;
+    int total_sz;
     DST(int n): sz(n), lk(n), total_sz(n) {
         for(int i = 0; i < n; i++) {
             sz[i] = 1;

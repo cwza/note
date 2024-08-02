@@ -601,3 +601,65 @@ int main() {
     }
 }
 ```
+
+## Others
+* From l to n find the first j such that a[l]+a[l+1]+a[l+2]+...+a[j] >= k, if no such j then return n
+* From r to 0 find the first j such that a[r]+a[r-1]+a[r-2]+...+a[j] >= k, if no such j then return -1
+``` cpp
+using S = ll; // what your segment tree node store
+// how to merge 2 subtree(segments)?? 
+// Ans: + for sum query and min for minimum query
+S op(S lhs, S rhs) {
+    return lhs + rhs;
+}
+// when a subtree is empty, what it should return when be merged??
+// Ans: 0 for sum query and 2e9 for minimum query
+S e() {
+    return 0;
+}
+using F = ll; // data that you want to apply to your segment
+// what should be do when you apply l then r
+F composition(F l, F r) {
+    return l + r;
+}
+// if you apply id to segment, nothing would change
+F id() {
+    return 0;
+}
+// How does S changed when you apply F to it
+S mapping(F f, S x) {
+    return x + f;
+}
+
+struct SegmentTree {
+    int n;
+    atcoder::lazy_segtree<S, op, e, F, mapping, composition, id> st;
+    SegmentTree(vector<ll> a): n(a.size()), st(a) {
+    }
+    void add(int l, F val) {
+        st.apply(l, l+1, val);
+    }
+    int next(int l, ll k) {
+        auto g = [&](ll x) -> bool {
+            return x < k;
+        };
+        // max_right will return the first j such that g(op(a[l], a[l+1], a[l+2], ..., a[j])) is false
+        return st.max_right<decltype(g)>(l, g);
+    }
+    int prev(int r, ll k) {
+        auto g = [&](ll x) -> bool {
+            return x < k;
+        };
+        // min_left will return the last j such that g(op(a[r-1], a[r-2], a[r-3], ..., a[j])) is true
+        return st.min_left<decltype(g)>(r+1, g)-1;
+    }
+};
+
+int main() {
+    vector<int> a = {2,3,2,1,3,5,6,4,3,7};
+    SegmentTree st(a); 
+    cout << st.next(4, 16); // 7
+    cout << st.prev(4, 8); // 2 
+}
+
+```

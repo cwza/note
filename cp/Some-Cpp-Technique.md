@@ -72,6 +72,25 @@ int main() {
 }
 ```
 
+## Pass Captured Lambda to function
+``` cpp
+int main() {
+    int mode;
+    auto cmp = [&](int lhs, int rhs) {
+        if(mode==0) return lhs < rhs;
+        else return rhs < lhs;
+    };
+    mode = 1;
+    set<int, decltype(cmp)> a(cmp);
+    for(int i = 0; i < 5; i++) a.insert(i);
+    dbg(a); // 4,3,2,1,0
+    mode = 0;
+    set<int, decltype(cmp)> b(cmp);
+    for(int i = 0; i < 5; i++) b.insert(i);
+    dbg(b); // 0,1,2,3,4
+}
+```
+
 ## Others
 ### Find smallest 2 values in array
 ``` cpp
