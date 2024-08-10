@@ -1,6 +1,7 @@
 # Vim Shortcut
 
 - Visual mode press U: Upper case, u: Lower case , Normal or Visual mode press ~: Toggle case
+- V=: to select and indent
 - Ctrl-E, Ctrl-Y: Scroll without move cursor
 - Ctrl-a, Ctrl-x: increase decrease number
 - f, F, t, T: find or to next character
