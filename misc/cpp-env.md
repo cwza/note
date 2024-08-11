@@ -1,4 +1,4 @@
-[[toc]]
+[toc]
 
 # Linux Cpp Environment for Competitive Programming
 
@@ -70,7 +70,7 @@ void print_args(Ostream& os, Args... args) {
         print_args(cerr, __VA_ARGS__); \
         cerr << "}"; \
     } \
-    cerr << endl; \
+    cerr << "\e[39m" << endl; \
 }
 ```
 
