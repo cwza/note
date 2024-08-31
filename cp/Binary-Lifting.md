@@ -3,6 +3,82 @@
 # Binary Lifting
 - up[u][i] = up[up[u][i-1]][i-1]
 
+## Successor Paths
+- [CSES - Planets Queries I](https://cses.fi/problemset/task/1750/)
+
+``` cpp
+#include <bits/stdc++.h>
+using namespace std;
+#ifdef DEBUG
+    #include "debug.hpp"
+#else
+    #define dbg(...)
+#endif
+using ll = long long;
+
+/*
+Binary Lifting
+Competitive Programmer's Handbook
+Ch16.3 Successor paths
+dp:
+            1 2 3 4 5 6 7 8 9 
+succ(x,1)   3 5 7 6 2 2 1 6 3 
+succ(x,2)   7 2 1 2 5 5 3 2 7 
+succ(x,4)   3 2 7 2 5 5 1 2 3 
+succ(x,8)   7 2 1 2 5 5 3 2 7
+
+Sample Test Case
+9 1
+3 5 7 6 2 2 1 6 3
+4 11
+ans: 5
+*/
+
+const int maxN = 2e5;
+int dp[maxN][31];
+
+void solve() {
+    int n, q;
+    cin >> n >> q;
+    vector<int> t(n);
+    for(int i = 0; i < n; i++) {
+        cin >> t[i];
+        t[i]--;
+    }
+
+    for(int i = 0; i < n; i++) dp[i][0] = t[i];
+
+    for(int j = 1; j < 31; j++) {
+        for(int i = 0; i < n; i++) {
+            dp[i][j] = dp[dp[i][j-1]][j-1];
+        }
+    }
+    
+    while(q--) {
+        int x, k;
+        cin >> x >> k;
+        x--;
+        for(int i = 0; i < 31; i++) {
+            if((k>>i)&1) x = dp[x][i]; 
+        }
+        cout << x+1 << "\n";
+    }
+}
+ 
+bool multi = 0;
+int main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+ 
+    int t = 1;
+    if (multi)
+        cin >> t;
+    for (int i = 0; i < t; i++) {
+        solve();
+    }
+}
+```
+
 ## Kth Ancestor of a Tree Node
 - [CSES - Company Queries I](https://cses.fi/problemset/task/1687/)
 - [https://www.youtube.com/watch?v=oib-XsjFa-M](https://www.youtube.com/watch?v=oib-XsjFa-M)

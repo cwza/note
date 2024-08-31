@@ -117,7 +117,7 @@ int main()
         cin >> u >> v >> w;
         u--; v--;
         d[u][v] = min(d[u][v], ll(w));
-        d[v][u] = min(d[u][v], ll(w));
+        d[v][u] = min(d[v][u], ll(w));
     }
  
     for(int k = 0; k < n; k++) {

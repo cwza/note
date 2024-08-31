@@ -53,12 +53,12 @@ for(int i = 1; i <= maxN; i++) {
 ```cpp
 vector<array<int, 2>> ans;
 for(int i = 2; i*i <= N; i++ {
-		int cnt = 0;
-		while(N%i==0) {
-				N /= i;
-				cnt++;
-		}
-		if(cnt) ans.push_back(i, cnt);
+    int cnt = 0;
+    while(N%i==0) {
+        N /= i;
+        cnt++;
+    }
+    if(cnt) ans.push_back(i, cnt);
 }
 if(N>1) ans.push_back(N, 1);
 ```
@@ -80,7 +80,7 @@ for (int x = 2; x <= n; x++) {
 
 ## Find all prime factors of X in logN by modified sieve
 ```cpp
-// precompute lpf[i] in O(nlogn): smallest prime factor for i
+// precompute spf[i] in O(nlogn): smallest prime factor for i
 const int maxX = 1e7;
 int spf[maxX+1];
 for(int i = 2; i <= maxX; i++) {
@@ -96,6 +96,14 @@ int x = 1500;
 set<int> primes;
 while(x>1) {
     primes.insert(spf[x]);
+    x /= spf[x];
+}
+
+// prime factorization of X in logX
+int x = 1500;
+map<int, int> ans;
+while(x>1) {
+    map[spf[x]]++;
     x /= spf[x];
 }
 ```
