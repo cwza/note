@@ -90,22 +90,109 @@ int main() {
 
 ## Solve by Binary Search, O(nlogn)
 - If you want to get the length of the longest non-decreasing subsequence, then use upper_bound instead of lower_bound
+```
+sequence : -7 10  9  2  3  8  8  1
+temp LIS :
+position :
+
+sequence :(-7)10  9  2  3  8  8  1
+temp LIS : -7
+position :  1		// -7 在 LIS 的第一個位置
+
+sequence : -7(10) 9  2  3  8  8  1
+temp LIS : -7 10
+position :  1  2	// 10 在 LIS 的第二個位置，以此類推。
+
+sequence : -7 10 (9) 2  3  8  8  1
+temp LIS : -7  9
+position :  1  2  2
+/* 9 成為 LIS 的潛力比 10 大, 所以以 9 代替 10 */
+
+sequence : -7 10  9 (2) 3  8  8  1
+temp LIS : -7  2
+position :  1  2  2  2
+/* 2 成為 LIS 的潛力比 9 大, 所以以 2 代替 9 */
+
+sequence : -7 10  9  2 (3) 8  8  1
+temp LIS : -7  2  3
+position :  1  2  2  2  3
+
+sequence : -7 10  9  2  3 (8) 8  1
+temp LIS : -7  2  3  8
+position :  1  2  2  2  3  4
+
+sequence : -7 10  9  2  3  8 (8) 1
+temp LIS : -7  2  3  8
+position :  1  2  2  2  3  4  4
+/* 8 成為 LIS 的潛力比 8 大, 所以以 8 代替 8 */
+
+sequence : -7 10  9  2  3  8  8 (1)
+temp LIS : -7  1  3  8
+position :  1  2  2  2  3  4  4  2
+/* 1 成為 LIS 的潛力比 2 大, 所以以 1 代替 2 */
+
+-------------------
+
+sequence : -7 10  9  2  3  8 (8) 1
+position :  1  2  2  2  3  4 (4) 2
+LIS      :  -  -  -  8
+/* search 4th, 8 is fourth LIS element */
+
+sequence : -7 10  9  2 (3) 8  8  1
+position :  1  2  2  2 (3) 4  4  2
+LIS      :  -  -  3  8
+/* search 3rd, 3 is third LIS element */
+
+sequence : -7 10  9 (2) 3  8  8  1
+position :  1  2  2 (2) 3  4  4  2
+LIS      :  -  2  3  8
+/* search 2nd, 2 is second LIS element */
+
+sequence :(-7)10  9  2  3  8  8  1
+position : (1) 2  2  2  3  4  4  2
+LIS      : -7  2  3  8
+/* search 1st, -7 is first LIS element */
+```
 ```cpp
 int main() {
-    // IO("cbarn2");
- 
-    int N;
-    cin >> N;
-    
-    vector<int> ar;
-    while(N--) {
-        int a;
-        cin >> a;
-        auto iter = lower_bound(ar.begin(), ar.end(), a);
-        if(iter==ar.end()) ar.push_back(a);
-        else *iter = a;
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for(int i = 0; i < n; i++) cin >> a[i];
+
+    /*
+         0 1 2 3 4 5 6 7
+    a:   7 3 5 3 6 2 9 8
+    arr: 2 5 6 8
+    pos: 0 0 1 0 2 0 3 3
+    */
+    vector<int> arr;
+    vector<int> pos(n);
+    for(int i = 0; i < n; i++) {
+        int id = lower_bound(arr.begin(), arr.end(), a[i])-arr.begin();
+        if(id==(int)arr.size()) {
+            arr.push_back(a[i]);
+        } else {
+            arr[id] = a[i];
+        }
+        pos[i] = id;
     }
-    cout << ar.size();
+
+    // print the LIS length
+    int len = arr.size();
+    cout << len << "\n";
+
+    // print the LIS sequence
+    vector<int> ans;
+    for(int i = n-1; i >= 0; i--) {
+        if(pos[i]==len-1) {
+            ans.push_back(a[i]);
+            len--;
+        }
+    }
+    reverse(ans.begin(), ans.end());
+    for(int i = 0; i < (int)ans.size(); i++) cout << ans[i] << " ";
+    cout << "\n";
 }
 ```
 

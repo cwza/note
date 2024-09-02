@@ -62,46 +62,48 @@ long long modinv(long long a, long long p) {
     return fpow(a, p-2, p);
 }
 
-struct ModLL {
+struct Modulo {
     ll val;
-    ModLL(int _val): val(_val){}
-    ModLL& operator+=(ModLL rhs) {
+    Modulo(ll _val): val(_val){
+        val %= modN;
+    }
+    Modulo& operator+=(Modulo rhs) {
         val += rhs.val;
         val %= modN;
         return *this;
     }
-    ModLL& operator-=(ModLL rhs) {
+    Modulo& operator-=(Modulo rhs) {
         val -= rhs.val;
         while(val<0) val += modN;
         return *this;
     }
-    ModLL& operator*=(ModLL rhs) {
+    Modulo& operator*=(Modulo rhs) {
         val *= rhs.val;
         val %= modN;
         return *this;
     }
-    ModLL& operator/=(ModLL rhs) {
+    Modulo& operator/=(Modulo rhs) {
         val = val*modinv(rhs.val, modN);
         val %= modN;
         return *this;
     }
-    friend ModLL operator+(ModLL lhs, ModLL rhs) {
+    friend Modulo operator+(Modulo lhs, Modulo rhs) {
         lhs += rhs;
         return lhs;
     }
-    friend ModLL operator-(ModLL lhs, ModLL rhs) {
+    friend Modulo operator-(Modulo lhs, Modulo rhs) {
         lhs -= rhs;
         return lhs;
     }
-    friend ModLL operator*(ModLL lhs, ModLL rhs) {
+    friend Modulo operator*(Modulo lhs, Modulo rhs) {
         lhs *= rhs;
         return lhs;
     }
-    friend ModLL operator/(ModLL lhs, ModLL rhs) {
+    friend Modulo operator/(Modulo lhs, Modulo rhs) {
         lhs /= rhs;
         return lhs;
     }
-    friend ostream& operator<<(ostream& os, ModLL& modll) {
+    friend ostream& operator<<(ostream& os, Modulo& modll) {
         os << modll.val;
         return os;
     }

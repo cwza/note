@@ -194,3 +194,82 @@ int main() {
     dbg(centroid);
 }
 ```
+
+## Point Update Range Sum Query on Tree
+* https://cses.fi/problemset/task/1137/
+* Key:
+    + Use dfs start time as index in segment tree(or fenwick tree)
+    + sz[i]: subtree size of i
+    + range sum of subtree i: range sum of [dfs_st[i], dfs_st[i]+sz[i]-1] in segment tree
+``` cpp
+/*
+Idea from CPH
+    0
+   . .
+  1   2
+     . .
+    3   4
+ 
+            0 1 2 3 4 (original index)
+dfs_st      0 1 2 3 4 (index in segment tree)
+sz          5 1 3 1 1
+value       4 2 5 2 1
+
+sum of subtree at i = sum in range [dfs_st[i], dfs_st[i]+sz[i]-1]
+*/
+
+
+void solve() {
+    int n, q;
+    cin >> n >> q;
+    vector<int> inp(n);
+    for(int i = 0; i < n; i++) cin >> inp[i];
+    vector<vector<int>> adj(n);
+    for(int i = 0, u, v; i < n-1; i++) {
+        cin >> u >> v;
+        u--; v--;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+
+    vector<int> sz(n), dfn(n), nfd(n);
+    int t = 0;
+    auto dfs = [&](auto &self, int u, int p) -> void {
+        sz[u] = 1;
+        dfn[u] = t;
+        nfd[t] = u;
+        t++;
+        for(int v : adj[u]) {
+            if(v!=p) {
+                self(self, v, u);
+                sz[u] += sz[v];
+            }
+        }
+    };
+    dfs(dfs, 0, -1);
+    dbg(sz);
+    dbg(dfn);
+
+    atcoder::fenwick_tree<long long> fw(n);
+    for(int i = 0; i < n; i++) {
+        fw.add(dfn[i], inp[i]);
+    }
+
+    while(q--) {
+        int mode;
+        cin >> mode;
+        if(mode==1) {
+            int s, x;
+            cin >> s >> x;
+            s--;
+            fw.add(dfn[s], x-inp[s]);
+            inp[s] = x;
+        } else {
+            int s;
+            cin >> s;
+            s--;
+            cout << fw.sum(dfn[s], dfn[s]+sz[s]) << "\n";
+        }
+    }
+}
+```
