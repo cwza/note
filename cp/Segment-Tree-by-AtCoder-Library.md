@@ -188,6 +188,8 @@ S e() {
 struct SegmentTree {
     int n;
     atcoder::segtree<S, op, e> st;
+    SegmentTree(int _n): n(_n), st(_n) {
+    }
     SegmentTree(vector<S> &a): n(a.size()), st(a) {
     }
     void update(int l, S val) {
@@ -202,6 +204,9 @@ struct SegmentTree {
 struct SegmentTreeBF {
     int n;
     vector<ll> a;
+    SegmentTreeBF(int _n): n(_n) {
+        a.resize(n);
+    }
     SegmentTreeBF(vector<ll> &_a): n(_a.size()), a(_a) {
     }
     void update(int l, ll val) {
@@ -535,6 +540,8 @@ S mapping(F f, S x) {
 struct SegmentTree {
     int n;
     atcoder::lazy_segtree<S, op, e, F, mapping, composition, id> st;
+    SegmentTree(int _n): n(_n), st(_n) {
+    }
     SegmentTree(vector<S> &a): n(a.size()), st(a) {
     }
     void update(int l, int r, F val) {
@@ -549,11 +556,14 @@ struct SegmentTree {
 struct SegmentTreeBF {
     int n;
     vector<ll> a;
+    SegmentTreeBF(int _n): n(_n) {
+        a.resize(n);
+    }
     SegmentTreeBF(vector<ll> &_a): n(_a.size()), a(_a) {
     }
     void update(int l, int r, ll val) {
         if(l>r) return;
-        for(int i = 0; i <= r; i++) a[i] += val;
+        for(int i = l; i <= r; i++) a[i] += val;
     }
     ll query(int l, int r) {
         if(l>r) return 0;
