@@ -64,6 +64,7 @@ long long modinv(long long a, long long p) {
 
 struct Modulo {
     ll val;
+    Modulo(): val(0) {}
     Modulo(ll _val): val(_val){
         val %= modN;
     }

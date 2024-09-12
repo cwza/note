@@ -2,7 +2,7 @@
 
 # Linux Cpp Environment for Competitive Programming
 
-## cp.sh
+## cptool.sh
 ``` sh
 g++ "${1:-main}.cpp" -o "${1:-main}" -std=c++17 -ggdb3 -Wall -Wextra -Wshadow -Wfloat-equal -D_GLIBCXX_DEBUG -D_GLIBCXX_ASSERTIONS -DDEBUG -fsanitize=undefined -fmax-errors=2
 ```

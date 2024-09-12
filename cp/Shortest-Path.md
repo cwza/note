@@ -18,16 +18,16 @@ int main() {
     fill(dist, dist+N, inf);
     dist[0] = 0;
     parent[0] = -1;
-    queue<pair<int,int>> qu;
-    qu.push({0, 0});
+    queue<int> qu;
+    qu.push(0);
     while(qu.size()) {
-        auto [du, u] = qu.front(); qu.pop();
-        if(du>dist[u]) continue;
+        auto u = qu.front(); qu.pop();
+        if(dist[u]==inf) continue;
         for(int v : adj[u]) {
-            if(dist[u]+1<dist[v]) {
+            if(dist[v]!=inf) {
                 dist[v] = dist[u]+1;
                 parent[v] = u;
-                qu.push({dist[v], v});
+                qu.push(v);
             }
         }
     }
