@@ -34,6 +34,10 @@ int main() {
 ```
 
 ## Uniquify Array
+* unique function will try to make the array not include *contiguos* same elements.
+* actually it just put the repeated elements at the last of the array, not really remove them.
+    + [1, 2, 3, 3, 3, 4, 2, 6] -> [1, 2, 3, 4, 2, 6, *3*, *3*], it will return the iterator that point to the first repeated 3
+    + the 2nd 2 is not contiguos repeated so it is ok
 ```cpp
 vector<int> divisors = {1,2,3,3,2,2};
 sort(divisors.begin(), divisors.end());

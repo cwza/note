@@ -2,25 +2,37 @@
 
 # Linux Cpp Environment for Competitive Programming
 
-## cptool.sh
+## Competitive Programming Tool Shell Script
+* Easy to compile cpp file
+* `./tool/cpt.sh`
+* Better to put this file to your system path 
 ``` sh
-g++ "${1:-main}.cpp" -o "${1:-main}" -std=c++17 -ggdb3 -Wall -Wextra -Wshadow -Wfloat-equal -D_GLIBCXX_DEBUG -D_GLIBCXX_ASSERTIONS -DDEBUG -fsanitize=undefined -fmax-errors=2
+#!/bin/bash
+
+optimize=0
+while getopts "oI:" flag
+do
+    case "${flag}" in
+        o) optimize=1;;
+    esac
+done
+filename=${@:$OPTIND:1} 
+if [ -z $filename ]; then
+    filename=main
+fi
+# echo "optimize=$optimize"
+# echo "filename=$filename"
+
+if [ $optimize -eq 0 ]; then
+    g++ "$filename.cpp" -o "$filename" -std=c++17 -Wall -Wextra -Wshadow -Wfloat-equal -D_GLIBCXX_DEBUG -D_GLIBCXX_ASSERTIONS -DDEBUG -fsanitize=undefined -fmax-errors=2
+else
+    g++ "$filename.cpp" -o "$filename" -std=c++17 -O2 -DDEBUG -fmax-errors=2
+fi
 ```
 
-## Makefile
-``` makefile
-f=main
-c: 
-	g++ "$(f).cpp" -o "$(f)" -std=c++17 -Wall -Wextra -Wshadow -Wfloat-equal -D_GLIBCXX_DEBUG -D_GLIBCXX_ASSERTIONS -DDEBUG -fsanitize=undefined -fmax-errors=2
-co:
-	g++ "$(f).cpp" -o "$(f)" -std=c++17 -O2 -Wall -Wextra -Wshadow -Wfloat-equal -D_GLIBCXX_DEBUG -D_GLIBCXX_ASSERTIONS -DDEBUG -fsanitize=undefined -fmax-errors=2
-cd: 
-	g++ "$(f).cpp" -o "$(f)" -std=c++17 -ggdb3 -Wall -Wextra -Wshadow -Wfloat-equal -D_GLIBCXX_DEBUG -D_GLIBCXX_ASSERTIONS -DDEBUG -fsanitize=undefined -fmax-errors=2
-r:
-	./$(f)
-```
-
-## debug.hpp
+## Competitive Programming Debug Tool
+* Easy to print something for debugging
+* `./tool/debug.hpp`
 ``` cpp
 #include <bits/stdc++.h>
 using namespace std;
@@ -74,12 +86,13 @@ void print_args(Ostream& os, Args... args) {
 }
 ```
 
-## main.cpp
+## Competitive Programming Simple Template
+* `./main.cpp`
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
 #ifdef DEBUG
-    #include "debug.hpp"
+    #include "./tool/debug.hpp"
 #else
     #define dbg(...)
 #endif
