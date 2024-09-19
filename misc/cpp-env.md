@@ -26,7 +26,7 @@ fi
 if [ $optimize -eq 0 ]; then
     g++ "$filename.cpp" -o "$filename" -std=c++17 -Wall -Wextra -Wshadow -Wfloat-equal -D_GLIBCXX_DEBUG -D_GLIBCXX_ASSERTIONS -DDEBUG -fsanitize=undefined -fmax-errors=2
 else
-    g++ "$filename.cpp" -o "$filename" -std=c++17 -O2 -DDEBUG -fmax-errors=2
+    g++ "$filename.cpp" -o "$filename" -std=c++17 -O2 -fmax-errors=2
 fi
 ```
 
