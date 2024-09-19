@@ -4,7 +4,7 @@
 
 ## Competitive Programming Tool Shell Script
 * Easy to compile cpp file
-* `./tool/cpt.sh`
+* `./tool/cpt`
 * Better to put this file to your system path 
 ``` sh
 #!/bin/bash
@@ -65,7 +65,7 @@ Ostream& operator<<(Ostream& os,  const Cont& v) {
 }
 
 // pretty cout variadic arguments
-template <typename Ostream, typename... Args>
+template<typename Ostream, typename... Args>
 void print_args(Ostream& os, Args... args) {
     (..., (os << args << ", "));
 }
@@ -83,32 +83,6 @@ void print_args(Ostream& os, Args... args) {
     } \
     cerr << "\e[39m" << endl; \
 }
-
-
-// pretty cout array
-template <typename T>
-std::enable_if_t<rank<T>::value == 1>
-print_arr(const T& a) {
-    for(size_t i = 0; i < extent<T>::value; i++) cerr << a[i] << " ";
-}
- 
-template <typename T>
-std::enable_if_t<rank<T>::value != 1>
-print_arr(const T& a)
-{
-    for(size_t i = 0; i < extent<T>::value; i++) {
-        print_arr(a[i]);
-        if(i!=extent<T>::value-1)
-            for(size_t j = 0; j < rank<T>::value-1; j++) cerr << "\n";
-    }
-}
-
-#define dbgarr(a) { \
-    cerr <<"\e[91m" << __func__<<":"<<__LINE__<<"\t"; \
-    cerr << #a << ": \n"; \
-    print_arr(a); \
-    cerr << "\e[39m" << endl; \
-}
 ```
 
 ## Competitive Programming Simple Template
@@ -120,7 +94,6 @@ using namespace std;
     #include "./tool/debug.hpp"
 #else
     #define dbg(...)
-    #define dbgarr(a)
 #endif
 using ll = long long;
 
