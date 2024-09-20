@@ -1,4 +1,4 @@
-[[toc]]
+[toc]
 
 # Shortest Path
 
