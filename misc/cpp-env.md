@@ -10,10 +10,12 @@
 #!/bin/bash
 
 optimize=0
-while getopts "oI:" flag
+version=17
+while getopts "oI:v:" flag
 do
     case "${flag}" in
         o) optimize=1;;
+        v) version=$OPTARG;;
     esac
 done
 filename=${@:$OPTIND:1} 
@@ -22,11 +24,12 @@ if [ -z $filename ]; then
 fi
 # echo "optimize=$optimize"
 # echo "filename=$filename"
+# echo "version=$version"
 
 if [ $optimize -eq 0 ]; then
-    g++ "$filename.cpp" -o "$filename" -std=c++17 -Wall -Wextra -Wshadow -Wfloat-equal -D_GLIBCXX_DEBUG -D_GLIBCXX_ASSERTIONS -DDEBUG -fsanitize=undefined -fmax-errors=2
+    g++ "$filename.cpp" -o "$filename" -std=c++$version -Wall -Wextra -Wshadow -Wfloat-equal -D_GLIBCXX_DEBUG -D_GLIBCXX_ASSERTIONS -DDEBUG -fsanitize=undefined -fmax-errors=2
 else
-    g++ "$filename.cpp" -o "$filename" -std=c++17 -O2 -fmax-errors=2
+    g++ "$filename.cpp" -o "$filename" -std=c++$version -O2 -fmax-errors=2
 fi
 ```
 
