@@ -3,15 +3,24 @@
 # Number Theory
 
 ## Useful Property
-- lcm(a, b) = ab/gcd(a, b)
-- gcd(a, b) = gcd(a, b-a) if a ≤ b
+- lcm(a, b) = a*b/gcd(a, b)
+- gcd(a, 0) = a, if a > 0
+- gcd(a, b) = gcd(a-b, b) if b <= a
+    + gcd(a, b) = gcd(a%b, b) if b <= a
+- if a, b coprime then a-b and b is also coprime
+    + if a, b coprime then a%b and b is also coprime
+- a % b < a/2, if a >= b
+- supose gcd(a, b) = g, we can always find two integers x, y(include negative and zero) such that `x*a + y*b = z*g, z is any non-negative integer`, that is all multiplies of g can be composed from a and b.
+    + this is called Bezout Lemma
 - number of prime  less than n ~ n/ln(n)
 - number of factors for n ~ cube_root(n)
 - number of distinct prime factors n ~ lnln(n)
 
 ## Find gcd(a, b) by Euclid’s algorithm
-- gcd(a,b) = a if b = 0
-- gcd(a,b) = gcd(b, a%b) if b ≠ 0
+- gcd(a, b) = a if b = 0
+- gcd(a, b) = gcd(b, a%b) if b ≠ 0
+- Time Complexity: O( log(min(a, b)) )
+    + a % b < a/2 if a >= b
 ```cpp
 int gcd(int a, int b) {
        if (b == 0) return a;
@@ -31,12 +40,23 @@ for(int i = 1; i*i <= M; i++) {
 sort(factor.begin(), factor.end());
 ```
 
-## Find all factors of 1 … N in O(NlogN)
+## Find all factors of 1 … N in Theta(NlogN)
 * Idea: add 1 to all 1's multiplier, add 2 to all 2's multiplier, add 3 to all 3's multiplier, .....etc
-* Why O(NlogN)
-    + n/1 + n/2 + n/3 + ... + n/n = n(1/n + 1/2 + 1/3 + .... + 1/n)
-    + 1/n + 1/2 + ... + 1/n <= integrate 1/x from 1 to n = logn
-    + n/1 + n/2 + ... + n/n <= nlogn = O(nlogn)
+* Why Theta(NlogN)???
+    + Our computation will be n/1 + n/2 + n/3 + .. + n/n = n(1 + 1/2 + 1/3 + ... + 1/n)
+        - 1 + 1/2 + 1/3 + ... + 1/n is called Harmonic Series(Denote as Hn), this value is around Theta(logn)
+            + We can bound Harmonic Series by this inequality: logn/2 <= Hn <= logn
+        - so n*Hn should be Theta(nlogn)
+    + Show Hn <= logn = O(logn)
+        - 1 + 1/2 + ... + 1/n = 1 + (1/2 + 1/3) + (1/4 + 1/5 + 1/6 + 1/7) + ...... <= 1 + (1/2 + 1/2) + (1/4 + 1/4 + 1/4 + 1/4) + ..... = 1 + 1 + 1 + .... = log(n+1)
+            + This number is just the height of a complete binary tree which have n nodes
+        - So Hn <= log(n+1) = O(logn)
+    + Show Hn >= logn/2 = Omega(logn)
+        - 1 + 1/2 + ... + 1/n = 1 + 1/2 + (1/3 + 1/4) + (1/5 + 1/6 + 1/7 + 1/8) + ...... >= 1/2 + 1/2 + (1/4 + 1/4) + (1/8 + 1/8 + 1/8 + 1/8) + .... = 1/2 + 1/2 + 1/2 + .... = log(n+1)/2
+        - So Hn >= log(n+1)/2 = Omega(logn)
+    + Another proof by integration shows Hn <= O(logn)
+        - 1 + 1/2 + ... + 1/n = 1 + (1/2 + ... + 1/n) <= 1 + integrate 1/x from 1 to n = 1+logn
+        - So Hn <= 1+logn = O(logn)
 ```cpp
 // factors[1] = {1}, factors[2] = {1,2}, factors[6] = {1,2,3,6}
 const int maxN = 1e5;
@@ -63,28 +83,28 @@ for(int i = 2; i*i <= N; i++ {
 if(N>1) ans.push_back(N, 1);
 ```
 
-## Find primes by sieve (nlogn)
+## Find primes by sieve O(nlogn)
 ```cpp
 const int n = 20;
-int sieve[n+1];
-for (int x = 2; x <= n; x++) {
-    if (sieve[x]) continue;
-    for (int u = 2*x; u <= n; u += x) {
-        sieve[u] = x;
+int prime[n+1];
+fill(prime, prime+n+1, 1);
+prime[0] = 0;
+prime[1] = 0;
+for (int i = 2; i <= n; i++) {
+    // if (!prime[i]) continue;
+    for (int j = 2*i; j <= n; j += i) {
+        prime[j] = 0;
     }
 }
-// sieve[]: 
-// 2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20
-// 0  0  2  0  3  0  2  3  5  0  3  0  7  5  2  0  3  0  5
 ```
 
-## Find all prime factors of X in logN by modified sieve
+## Find all prime factors of X in O(logN) by modified sieve
 ```cpp
 // precompute spf[i] in O(nlogn): smallest prime factor for i
 const int maxX = 1e7;
 int spf[maxX+1];
 for(int i = 2; i <= maxX; i++) {
-    if(spf[i]) continue;
+    // if(spf[i]) continue;
     for(int j = i; j <= maxX; j+=i) {
         if(spf[j]) continue;
         spf[j] = i;
@@ -103,7 +123,7 @@ while(x>1) {
 int x = 1500;
 map<int, int> ans;
 while(x>1) {
-    map[spf[x]]++;
+    ans[spf[x]]++;
     x /= spf[x];
 }
 ```
