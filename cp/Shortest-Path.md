@@ -182,7 +182,7 @@ int main() {
 - [CSES - Investigation](https://cses.fi/problemset/task/1202/)
 
 ### Pull DP
-- Run DAG DP on dijkstra shortest graph (onlyedges u→v that satisfies dist[u]+w[u,v]==dist[v])
+- Run DAG DP on dijkstra shortest graph (only edges u→v that satisfies dist[u]+w[u,v]==dist[v])
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;

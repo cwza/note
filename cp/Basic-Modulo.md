@@ -23,7 +23,13 @@ long long mod_minus(long long a, long long b, long long modN) {
 ```
 
 ## Divide
+- M should be prime and a should be divisible by b
 - (a/b)%M = (a%M * modinv(b)) % M
+- Little Fermat Theorem: for any 1<=a<p (p is a prime), a^(p-1) % p = 1, more general this holds if a and p coprime
+    + (a/b)%M = (a * b^(-1)) % M
+    +         = (a * b^(-1)*b^(M-1)) % M,   we use Little Fermat Theorem: b^(M-1)%M = 1
+    +         = (a * b^(M-2)) % M
+    + b^(M-2) is our modinv
 ```cpp
 long long fpow(long long a, long long b, long long modN) {
     long long res = 1;
