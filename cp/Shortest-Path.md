@@ -24,7 +24,7 @@ int main() {
         auto u = qu.front(); qu.pop();
         if(dist[u]==inf) continue;
         for(int v : adj[u]) {
-            if(dist[v]!=inf) {
+            if(dist[v]==inf) {
                 dist[v] = dist[u]+1;
                 parent[v] = u;
                 qu.push(v);
