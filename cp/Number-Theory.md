@@ -128,6 +128,42 @@ while(x>1) {
 }
 ```
 
+## Given a, and we know b is in [1, n], find number of b such that gcd(a, b) = 1
+* Use prime factorization to find the prime factors of a, denote as p1, p2, ...., pk
+* By Inclusion and Exclusion, the answer will be ` n - n/p1 - n/p2 - .... - n/pk + n/(p1*p2) + n/(p1*p3) + ... - n/(p1*p2*p3) - n/(...) + ... `
+    - Note that these divisions are actually divide and take floor
+    - we add all elements which is n (k choose 0)
+    - we minus the elements which are divisible by `p1, p2, p3, ...` (k choose 1)
+    - we add back the elements which are divisible by `p1*p2, p1*p3, ...` (k choose 2)
+    - ... (k choose k)
+* Implementation
+    - Generate all subset of p1, p2, ..., pk
+    - minus if the subset size is odd
+    - add if the subset size is even
+``` cpp
+vector<int> get_primes(int a) {
+    ...
+}
+int main() {
+    int n, a;
+    cin >> n >> a;
+    vector<int> primes = get_primes(a);
+    int m = primes.size();
+    ll ans = 0;
+    for(int i = 0; i < (1<<m); i++) {
+        ll cur = 1;
+        for(int j = 0; j < m; j++) {
+            if((1<<j)&i) {
+                cur *= primes[j];
+            }
+        }
+        if(__builtin_popcount(i)%2==1) ans -= n/cur;
+        else ans += n/cur;
+    }
+    cout << ans << "\n";
+}
+```
+
 ## Find the smallest x such that x in [a, b] and x divides by p, also find the largest in O(1)
 - Smallest: ceil(a/p) * p
 - Largest: floor(b/p) * p
