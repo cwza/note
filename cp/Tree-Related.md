@@ -4,11 +4,11 @@
 
 ## Find the tree diameter in O(n)
 - [CSES - Tree Diameter](https://cses.fi/problemset/task/1131)
-- Step
-    - Root any
-    - run dfs to find the farest node from root, we denote it as farest1
-    - run dfs to find the farest node from farest1, we denote it as farest2
-    - The answer is the distance between farest1 and farest 2
+### Solution1
+- Root any
+- run dfs to find the farest node from root, we denote it as farest1
+- run dfs to find the farest node from farest1, we denote it as farest2
+- The answer is the distance between farest1 and farest 2
 ```cpp
 const int maxN = 2e5;
 vector<int> adj[maxN];
@@ -42,14 +42,70 @@ int main() {
     cout << dist1[farest2];
 }
 ```
+### Solution2
+- Root any
+- For each node u, within its subtree, find the 1st largest length from it to leaf(height1[u]), and also find the 2nd largest length from it to leaf(height2[u])
+    + height2[u] = max(height2[u], height1[v] + 1)
+    + if(height2[u]>height1[u]) swap(height2[u], height1[u])
+- Take the max of height1[u]+height2[u] through each node, this is the answer
+``` cpp
+#include <bits/stdc++.h>
+using namespace std;
+#ifdef DEBUG
+    #include "./tool/debug.hpp"
+#else
+    #define dbg(...)
+    #define dbgarr(a)
+#endif
+using ll = long long;
+
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<vector<int>> adj(n);
+    for(int i = 0, u, v; i < n-1; i++) {
+        cin >> u >> v;
+        u--; v--;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    int ans = 0;
+    vector<int> height1(n), height2(n);
+    auto dfs = [&](auto &self, int u, int p) -> void {
+        for(int v : adj[u]) {
+            if(v==p) continue;
+            self(self, v, u);
+            height2[u] = max(height2[u], height1[v]+1);
+            if(height2[u]>height1[u]) swap(height2[u], height1[u]);
+        }
+        ans = max(ans, height1[u]+height2[u]);
+    };
+    dfs(dfs, 0, -1);
+    cout << ans << "\n";
+}
+ 
+bool multi = 0;
+int main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+ 
+    int t = 1;
+    if (multi)
+        cin >> t;
+    for (int i = 0; i < t; i++) {
+        solve();
+    }
+}
+```
 
 ## Find the longest path from each node in O(n)
 - [CSES - Tree Distances I](https://cses.fi/problemset/task/1132)
-- Step
-    - Root any
-    - run dfs to find the farest node from root, we denote it as farest1
-    - run dfs to find the farest node from farest1, we denote it as farest2
-    - The answer is for each node v, max(dist(farest1, v), dist(farest2, v))
+### Solution1
+- Root any
+- run dfs to find the farest node from root, we denote it as farest1
+- run dfs to find the farest node from farest1, we denote it as farest2
+- The answer is for each node v, max(dist(farest1, v), dist(farest2, v))
 ```cpp
 const int maxN = 2e5;
 vector<int> adj[maxN];
@@ -83,6 +139,78 @@ int main() {
     vector<int> dist2(n);
     dfs(farest2, -1, dist2);
     for(int i = 0; i < n; i++) cout << max(dist1[i], dist2[i]) << " ";
+}
+```
+### Solution2
+- Root any
+- We need to consider two paths. Path1 is from u down to leaf. Path2 is from u go up to its parent p.
+- dfs1: For each node u, within its subtree, find the 1st and 2nd largest length from it to leaf (down1[u], down2[u])
+    + please refers to `find the tree diameter section` above
+- dfs2: For each node u, go through its parent, find the largest length from it go through its parent and to leaf (up[u])
+    + up[u] = max(up[u], up[p]+1);
+    + if(down1[u]+1!=down1[p]) up[u] = max(up[u], down1[p]+1); `// use down1[p] if this down1[p] is not the path that go through u`
+    + else up[u] = max(up[u], down2[p]+1); `// else use down2[p]`
+- For each node u, take the max of up[u], down1[u] and this is answer
+``` cpp
+#include <bits/stdc++.h>
+using namespace std;
+#ifdef DEBUG
+    #include "./tool/debug.hpp"
+#else
+    #define dbg(...)
+    #define dbgarr(a)
+#endif
+using ll = long long;
+
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<vector<int>> adj(n);
+    for(int i = 0, u, v; i < n-1; i++) {
+        cin >> u >> v;
+        u--; v--;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    vector<int> down1(n), down2(n);
+    auto dfs = [&](auto &self, int u, int p) -> void {
+        for(int v : adj[u]) {
+            if(v==p) continue;
+            self(self, v, u);
+            down2[u] = max(down2[u], down1[v]+1);
+            if(down2[u]>down1[u]) swap(down2[u], down1[u]);
+        }
+    };
+    dfs(dfs, 0, -1);
+    vector<int> up(n);
+    auto dfs2 = [&](auto &self, int u, int p) -> void {
+        if(p!=-1) {
+            up[u] = max(up[u], up[p]+1);
+            if(down1[u]+1!=down1[p]) up[u] = max(up[u], down1[p]+1);
+            else up[u] = max(up[u], down2[p]+1);
+        }
+        for(int v : adj[u]) {
+            if(v==p) continue;
+            self(self, v, u);
+        }
+    };
+    dfs2(dfs2, 0, -1);
+    for(int i = 0; i < n; i++) cout << max(up[i], down1[i]) << " ";
+    cout << "\n";
+}
+ 
+bool multi = 0;
+int main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+ 
+    int t = 1;
+    if (multi)
+        cin >> t;
+    for (int i = 0; i < t; i++) {
+        solve();
+    }
 }
 ```
 
@@ -154,8 +282,9 @@ int main() {
 * A centroid of a tree is defined as a node such that when the tree is rooted at it, no other nodes have a subtree of size greater than n/2
 * Properties:
     + The number of centroids is always >= 1 and <= 2
-    + If there are 2 centroids, they must be adjacent to each other, and they must form a subtree that has exactly 1/n nodes.
-    + If C is the centroid of a tree, the sum of all other verticies to C is minimum.
+    + If there are 2 centroids, they must be adjacent to each other, and they must form a subtree that has exactly n/2 nodes.
+    + If C is the centroid of a tree, the sum of distances of all other verticies to C is minimum.
+    + The diameter of a tree is always contains centroids
 * run dfs from root, if node has any subtree that size greater than n/2 dfs such subtree, else it is the centroid
 * Problems
     + https://atcoder.jp/contests/abc362/tasks/abc362_f
