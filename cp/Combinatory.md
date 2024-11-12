@@ -79,19 +79,29 @@ int main() {
 ```
 
 ## Generate all subset
-- i&(1<<b): check whether the bth bit of i is 1 or not
-- i|(1<<b): set the bth bit of i to 1
+### Take or not take 0, 1 (Binary Expression)
 ```cpp
-vector<vector<int>> subsets;
-for(int i = 0; i < (1<<n); i++) {
-    vector<int> subset(n);
-    for(int b = 0; b < n; b++) {
-        if(i&(1<<b)) {
-            subset[b] = 1;
+for(int i = 0; i < (1<<n); i++) { // 0 <= i < 2^n
+    for(int j = 0; j < n; j++) {
+        // take the jth bit of i, the bit that represent 2^j
+        if((i>>j)&1==1) { // i/2^j % 2
+        } else {
         }
-        // dp[i|(1<<b)]
     }
-    subsets.push_back(subset);
+}
+```
+### Not take or take 1st or take 2nd, 0, 1, 2 (Ternary Expression)
+``` cpp
+for(int i = 0; i < fpow(3, n); i++) { // 0 <= i < 3^n
+    for(int j = 0; j < n; j++) {
+        // take the jth bit of i, the bit that represent 3^j
+        if(i/fpow(3, j)%3==0) {
+        }
+        if(i/fpow(3, j)%3==1) {
+        }
+        if(i/fpow(3, j)%3==2) {
+        }
+    }
 }
 ```
 
@@ -106,7 +116,8 @@ for(int i = 0; i < (1<<n); i++) {
 2 0 1
 2 1 0
 */
-vector<int> inp = {0,1,2}
+vector<int> inp = {0,1,2};
+sort(inp.begin(), inp.end());
 do{
     for(int a : inp) cout << a << " ";
     cout << endl;
