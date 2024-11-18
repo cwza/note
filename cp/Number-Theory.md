@@ -113,17 +113,22 @@ for(int i = 2; i <= maxX; i++) {
 
 // get all prime factors of X in logX
 int x = 1500;
-set<int> primes;
+// set<int> primes;
+vector<int> primes;
 while(x>1) {
-    primes.insert(spf[x]);
+    // primes.insert(spf[x]);
+    if(!ans.size() || ans.back()!=spf[x]) primes.push_back(spf[x]);
     x /= spf[x];
 }
 
 // prime factorization of X in logX
 int x = 1500;
-map<int, int> ans;
+// map<int, int> ans;
+vector<pair<int, int>> ans
 while(x>1) {
-    ans[spf[x]]++;
+    // ans[spf[x]]++;
+    if(ans.size() && ans.back().first==spf[x]) ans.back().second++;
+    else ans.push_back({spf[x], 1});
     x /= spf[x];
 }
 ```
