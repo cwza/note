@@ -1,7 +1,7 @@
 # Bit Operations
 
 ## Neat fact
-* A xor B = (A or B) - (A and B)
+* A xor B = (A or B) - (A and B) = (A + B) - 2*(A and B)
 * 2k xor 2k+1 = 1, (given 2 consecutive numbers which is even and odd, their xor will be 1, because the only difference of their binary expression is at the last position)
 * 0 xor 1 xor 2 xor 3 = 0, 4 xor 5 xor 6 xor 7 = 0, ...., so the consecutive xor cycle by 4
 * Given an array A, the `A[l] xor ... xor A[r] = (A[0] xor ... xor A[r]) xor (A[0] xor ... xor A[l-1]) = pref_xor(r) xor pref_xor(l-1)`

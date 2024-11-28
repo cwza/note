@@ -3,7 +3,7 @@
 * https://www.youtube.com/watch?v=zqWjEEFpKQE
 
 ## Basic Nim Game
-* N piles, each pile contains x1, x2, ..., xn balls, 2 players play this game, for each one need to remove at least one ball on one pile, who get the last ball wins, if theyi both act optimally, who wins?
+* N piles, each pile contains x1, x2, ..., xn balls, 2 players play this game, for each one need to remove at least one ball on one pile, who get the last ball wins, if they both act optimally, who wins?
 * Lose State: who at this state will lose <=> x1 xor x2 xor ... xor xn = 0
 ``` cpp
 #include <bits/stdc++.h>
