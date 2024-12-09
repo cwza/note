@@ -10,6 +10,7 @@
 - if a, b coprime then a-b and b is also coprime
     + if a, b coprime then a%b and b is also coprime
 - a % b < a/2, if a >= b
+- if a%m==b%m then (a-b)%m=0
 - supose gcd(a, b) = g, we can always find two integers x, y(include negative and zero) such that `x*a + y*b = z*g, z is any non-negative integer`, that is all multiplies of g can be composed from a and b.
     + this is called Bezout Lemma
 - number of prime  less than n ~ n/ln(n)

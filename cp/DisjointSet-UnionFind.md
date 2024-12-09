@@ -11,17 +11,16 @@ struct DST {
         }
     }
     int find(int x) {
-        while(lk[x]!=x) {
-            x = lk[x];
-        }
-        return x;
+        if(x==lk[x]) return x;
+        lk[x] = find(lk[x]);
+        return lk[x];
     }
     bool unite(int x, int y) {
         x = find(x);
         y = find(y);
         if(x==y) return false;
-        if(sz[x]>sz[y]) swap(x, y);
-        lk[x] = y;
+        if(sz[x]>sz[y]) swap(x, y); // sz[x] <= sz[y]
+        lk[x] = y; // x -> y
         sz[y] += sz[x];
         total_sz--;
         return true;
