@@ -4,7 +4,7 @@
     - minimum value that from inp[i] to inp[i+2^j-1], 2^j is the length
 - min(sparse[l][k], sparse[r-(1<<k)+1][k])
     - k = floor( lg(r-l+1) ) = 31 - __builtin_clz(r-l+1)
-- can be used on min, max, xor (can't be used on sum)
+- can be used on min, max, xor, gcd (can't be used on sum)
 - [(16) Sparse Table & RMQ (Range Minimum Query) - YouTube](https://www.youtube.com/watch?v=0jWeUdxrGm4&list=PLl0KD3g-oDOHpWRyyGBUJ9jmul0lUOD80&index=18)
 - [CSES - Static Range Minimum Queries](https://cses.fi/problemset/task/1647/)
 
@@ -19,7 +19,7 @@ struct SparseTable {
         int n = inp.size();
         int logn = 1;
         for(int i = 2; i < n; i*=2) logn++;
-        sparse.resize(n, vector<int>(logn));
+        sparse.resize(n, vector<int>(logn+1));
         for(int j = 0; j <= logn; j++) {
             for(int i = 0; i+(1<<j)-1 < n; i++) {
                 if(j==0) sparse[i][0] = inp[i];
