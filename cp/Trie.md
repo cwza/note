@@ -1,6 +1,6 @@
 # Trie
 * https://www.youtube.com/watch?v=MyiHeqtwOWQ
-## Problem1
+## Problem 1
 * https://leetcode.com/problems/implement-trie-prefix-tree/description/
 ``` cpp
 #include <bits/stdc++.h>
@@ -72,7 +72,7 @@ int main() {
 }
 ```
 
-## Problem2
+## Problem 2
 * https://leetcode.com/problems/longest-word-in-dictionary/
 ``` cpp
 #include<bits/stdc++.h>
@@ -114,4 +114,76 @@ public:
         return ans;
     }
 };
+```
+
+## Problem 3 - Maximum Xor Subarray
+* https://cses.fi/problemset/result/11392614/
+* Key:
+    + The concept is very like maximum subarray sum
+    + In maximum subarray sum we need to find the smallest one to make our sum large
+    + But in xor we use trie to help us to find the one that make our xor large
+``` cpp
+#include <bits/stdc++.h>
+using namespace std;
+#ifdef DEBUG
+    #include "./tool/debug.hpp"
+#else
+    #define dbg(...)
+    #define dbgarr(a)
+#endif
+using ll = long long;
+
+int main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+ 
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for(int i = 0; i < n; i++) cin >> a[i];
+
+    // Trie
+    vector<vector<int>> nxt = vector<vector<int>>(1, vector<int>(2));
+    int id = 0;
+    auto insert = [&](int x) -> void {
+        int cur = 0;
+        for(int i = 31; i >= 0; i--) {
+            int bit = (x>>i)&1;
+            if(!nxt[cur][bit]) {
+                nxt[cur][bit] = ++id;
+                nxt.push_back(vector<int>(2));
+            }
+            cur = nxt[cur][bit];
+        }
+    };
+    auto search = [&](int x) -> int {
+        int cur = 0;
+        int res = 0;
+        for(int i = 31; i >= 0; i--) {
+            int bit = (x>>i)&1;
+            if(nxt[cur][bit^1]) {
+                cur = nxt[cur][bit^1];
+                res |= (bit^1)<<i;
+            } else {
+                cur = nxt[cur][bit];
+                res |= bit<<i;
+            }
+        }
+        return res;
+    };
+
+    // very like maximum subarray sum
+    // in maximum subarray sum we need to find the smallest one to make our sum large
+    // but in xor we use trie to help us to find the one that can make our xor large
+    insert(0);
+    int ans = 0;
+    int cur_xor = 0;
+    for(int i = 0; i < n; i++) {
+        cur_xor ^= a[i];
+        int cur_ans = cur_xor^search(cur_xor);
+        ans = max(ans, cur_ans);
+        insert(cur_xor);
+    }
+    cout << ans << "\n";
+}
 ```
