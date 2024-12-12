@@ -9,9 +9,17 @@ long long rng() {
 	return std::uniform_int_distribution<long long>(0, INT64_MAX)(gen);
 }
 ```
+## Shuffle an array
+``` cpp
+vector<int> permutation(N);
+iota(permutation.begin(), permutation.end(), 0);
+mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+shuffle(permutation.begin(), permutation.end(), rng);
+```
 
 ## Custom Hash Map
 - gp_hash_table is much faster than unordered_map or map
+- also if you don't use random while hash, your answer will be hack by others.
 ```cpp
 #include <ext/pb_ds/assoc_container.hpp>
 using namespace __gnu_pbds;
@@ -77,7 +85,7 @@ int main() {
 int main() {
     int n;
     vector<vector<int>> adj(n, vector<int>());
-    auto dfs = [&](auto &self, int u) -> void {
+    auto dfs = [&](auto &&self, int u) -> void {
         for(auto v : adj[u]) {
             if(!vis[v]) self(self, v);
         }
@@ -102,6 +110,18 @@ int main() {
     set<int, decltype(cmp)> b(cmp);
     for(int i = 0; i < 5; i++) b.insert(i);
     dbg(b); // 0,1,2,3,4
+}
+```
+
+## sqrt
+* Do not use sqrt or sqrtl because they will return double
+    + sqrt(9) may return something like 2.999999 and you will cast it to integer to become 2
+``` cpp
+ll int_sqrt(ll x) {
+    ll k = sqrtl(x);
+    while(k*k<x) k++;
+    while(k*k>x) k--;
+    return k;
 }
 ```
 
