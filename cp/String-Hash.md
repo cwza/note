@@ -72,3 +72,91 @@ int main() {
     hashij = hashij*modinv(pi[i], m)%m;
 }
 ```
+
+## Use Template from USACO
+* https://cses.fi/problemset/task/1753
+``` cpp
+#include <bits/stdc++.h>
+using namespace std;
+#ifdef DEBUG
+    #include "./tool/debug.hpp"
+#else
+    #define dbg(...)
+    #define dbgarr(a)
+#endif
+using ll = long long;
+
+class HashedString {
+  private:
+	// change M and B if you want
+	static const long long M = 1e9+9;
+	static const long long M2 = 1e9+7;
+	static const long long B = 9973;
+
+	// pow[i] contains B^i % M
+	static vector<long long> pow, pow2;
+
+	// p_hash[i] is the hash of the first i characters of the given string
+	vector<long long> p_hash, p_hash2;
+
+  public:
+    // O(N)
+	HashedString(const string &s) : p_hash(s.size() + 1), p_hash2(s.size() + 1) {
+		while (pow.size() <= s.size()) { pow.push_back((pow.back() * B) % M); }
+		p_hash[0] = 0;
+		for (int i = 0; i < (int)s.size(); i++) {
+			p_hash[i + 1] = ((p_hash[i] * B) % M + s[i]) % M;
+		}
+
+		while (pow2.size() <= s.size()) { pow2.push_back((pow2.back() * B) % M2); }
+		p_hash2[0] = 0;
+		for (int i = 0; i < (int)s.size(); i++) {
+			p_hash2[i + 1] = ((p_hash2[i] * B) % M2 + s[i]) % M2;
+		}
+	}
+
+    // O(1)
+	long long get_hash(int start, int end) {
+		long long raw_val = (p_hash[end + 1] - (p_hash[start] * pow[end - start + 1]));
+		return (raw_val % M + M) % M;
+	}
+	long long get_hash2(int start, int end) {
+		long long raw_val = (p_hash2[end + 1] - (p_hash2[start] * pow2[end - start + 1]));
+		return (raw_val % M2 + M2) % M2;
+	}
+};
+vector<long long> HashedString::pow = {1};
+vector<long long> HashedString::pow2 = {1};
+// Uncomment following two lines which will randomly choose B to prevent open hash hack if you want to use it on Codeforces.
+// mt19937 rng((uint32_t)chrono::steady_clock::now().time_since_epoch().count());
+// const ll HashedString::B = uniform_int_distribution<ll>(0, M - 1)(rng);
+
+void solve() {
+    string s, t;
+    cin >> s >> t;
+    int n = s.size();
+    int m = t.size();
+    HashedString hs_s(s);
+    HashedString hs_t(t);
+    ll hash_t = hs_t.get_hash(0, m-1);
+    ll hash_t2 = hs_t.get_hash2(0, m-1);
+    int ans = 0;
+    for(int i = 0; i+m-1 < n; i++) {
+        if(hs_s.get_hash(i, i+m-1)==hash_t && hs_s.get_hash2(i, i+m-1)==hash_t2) ans++;
+    }
+    cout << ans << "\n";
+}
+ 
+bool multi = 0;
+int main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+ 
+    int t = 1;
+    if (multi)
+        cin >> t;
+    for (int i = 0; i < t; i++) {
+        solve();
+    }
+}
+```
