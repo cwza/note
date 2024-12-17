@@ -45,8 +45,9 @@ int main() {
 ```
 
 ## By BFS
-- Idea: Add indegree 0 nodes into answer, then remove them from graph, repeat until no indegree 0 nodes
+- Idea: Add in degree 0 nodes into answer, then remove them from graph, repeat until no in degree 0 nodes
     - Maintain a queue that always have indegree 0 nodes during BFS
+- Detect Cycle: At last, if there are any nodes their in degree not 0, then they are in the cycle.
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
