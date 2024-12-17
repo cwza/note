@@ -137,3 +137,8 @@ for(int a : as) {
 }
 // mn1 == 1, mn2 == 2;
 ```
+### Rotate the 2d matrix
+* Rotate 90 degree clockwise
+    - Transpose then reverse each row
+* Rotate 90 degree counter clockwise
+    - Transpose then reverse each column
