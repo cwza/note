@@ -86,12 +86,11 @@ using namespace std;
 #endif
 using ll = long long;
 
-class HashedString {
-  private:
-	// change M and B if you want
+struct HashedString {
 	static const long long M = 1e9+9;
 	static const long long M2 = 1e9+7;
-	static const long long B = 9973;
+	// static const long long M3 = 972663749;
+	static long long B;
 
 	// pow[i] contains B^i % M
 	static vector<long long> pow, pow2;
@@ -99,7 +98,6 @@ class HashedString {
 	// p_hash[i] is the hash of the first i characters of the given string
 	vector<long long> p_hash, p_hash2;
 
-  public:
     // O(N)
 	HashedString(const string &s) : p_hash(s.size() + 1), p_hash2(s.size() + 1) {
 		while (pow.size() <= s.size()) { pow.push_back((pow.back() * B) % M); }
@@ -107,7 +105,6 @@ class HashedString {
 		for (int i = 0; i < (int)s.size(); i++) {
 			p_hash[i + 1] = ((p_hash[i] * B) % M + s[i]) % M;
 		}
-
 		while (pow2.size() <= s.size()) { pow2.push_back((pow2.back() * B) % M2); }
 		p_hash2[0] = 0;
 		for (int i = 0; i < (int)s.size(); i++) {
@@ -127,9 +124,9 @@ class HashedString {
 };
 vector<long long> HashedString::pow = {1};
 vector<long long> HashedString::pow2 = {1};
-// Uncomment following two lines which will randomly choose B to prevent open hash hack if you want to use it on Codeforces.
-// mt19937 rng((uint32_t)chrono::steady_clock::now().time_since_epoch().count());
-// const ll HashedString::B = uniform_int_distribution<ll>(0, M - 1)(rng);
+long long HashedString::B = 9973;
+// static mt19937 gen((uint32_t)chrono::steady_clock::now().time_since_epoch().count());
+// long long HashedString::B = uniform_int_distribution<ll>(131, min(HashedString::M-1, HashedString::M2-1))(gen);
 
 void solve() {
     string s, t;
