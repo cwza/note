@@ -140,5 +140,33 @@ for(int a : as) {
 ### Rotate the 2d matrix
 * Rotate 90 degree clockwise
     - Transpose then reverse each row
+``` cpp
+template<typename T>
+vector<vector<T>> rotate(vector<vector<T>> &inp) {
+    int n = inp.size();
+    vector<vector<T>> ret(n, vector<T>(n));
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < n; j++) ret[j][i] = inp[i][j];
+    }
+    for(int i = 0; i < n; i++) reverse(ret[i].begin(), ret[i].end());
+    return ret;
+}
+```
 * Rotate 90 degree counter clockwise
     - Transpose then reverse each column
+``` cpp
+template<typename T>
+vector<vector<T>> rotate2(vector<vector<T>> &inp) {
+    int n = inp.size();
+    vector<vector<T>> ret(n, vector<T>(n));
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < n; j++) ret[j][i] = inp[i][j];
+    }
+    for(int j = 0; j < n; j++) {
+        for(int i = 0; i <= (n-1)/2; i++) {
+            swap(ret[i][j], ret[n-i-1][j]);
+        }
+    }
+    return ret;
+}
+```
