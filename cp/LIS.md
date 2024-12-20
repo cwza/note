@@ -197,5 +197,5 @@ int main() {
 ```
 
 ## LDS or LNIS
-- To find the longest non-increasing subsequence, just reverse the origin array and find the LIS
-- To find the longest decreasing subsequence, just reverse the origin array and find the LNDS(longest non-decreasing subsequence)
+- To find the longest decreasing subsequence, just reverse the origin array and find the LIS
+- To find the longest non-increasing subsequence, just reverse the origin array and find the LNDS(longest non-decreasing subsequence)
