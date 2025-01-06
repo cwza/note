@@ -203,19 +203,19 @@ struct SegmentTree {
 };
 struct SegmentTreeBF {
     int n;
-    vector<ll> a;
+    vector<S> a;
     SegmentTreeBF(int _n): n(_n) {
         a.resize(n);
     }
-    SegmentTreeBF(vector<ll> &_a): n(_a.size()), a(_a) {
+    SegmentTreeBF(vector<S> &_a): n(_a.size()), a(_a) {
     }
-    void update(int l, ll val) {
+    void update(int l, S val) {
         if(l>=n) return;
         a[l] = val;
     }
     ll query(int l, int r) {
         if(l>r) return 0;
-        ll ans = 0;
+        S ans = 0;
         for(int i = l; i <= r; i++) ans += a[i];
         return ans;
     }
@@ -555,19 +555,19 @@ struct SegmentTree {
 };
 struct SegmentTreeBF {
     int n;
-    vector<ll> a;
+    vector<S> a;
     SegmentTreeBF(int _n): n(_n) {
         a.resize(n);
     }
-    SegmentTreeBF(vector<ll> &_a): n(_a.size()), a(_a) {
+    SegmentTreeBF(vector<S> &_a): n(_a.size()), a(_a) {
     }
-    void update(int l, int r, ll val) {
+    void update(int l, int r, F val) {
         if(l>r) return;
         for(int i = l; i <= r; i++) a[i] += val;
     }
     ll query(int l, int r) {
         if(l>r) return 0;
-        ll ans = 0;
+        S ans = 0;
         for(int i = l; i <= r; i++) ans += a[i];
         return ans;
     }

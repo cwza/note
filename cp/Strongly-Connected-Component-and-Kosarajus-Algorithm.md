@@ -67,6 +67,10 @@ struct SCC {
                 compressed_adj[group[u]].push_back(group[v]);
             }
         }
+        for(int u = 0; u < n; u++) {
+            sort(compressed_adj[u].begin(), compressed_adj[u].end());
+            compressed_adj[u].resize(unique(compressed_adj[u].begin(), compressed_adj[u].end())-compressed_adj[u].begin());
+        }
     }
 };
 
