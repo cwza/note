@@ -24,14 +24,14 @@ struct SparseTable {
             for(int i = 0; i+(1<<j)-1 < n; i++) {
                 if(j==0) sparse[i][0] = inp[i];
                 else {
-                    sparse[i][j] = min(sparse[i][j-1], sparse[i+(1<<(j-1))][j-1]);
+                    sparse[i][j] = min(sparse[i][j-1], sparse[i+(1<<(j-1))][j-1]); // change me
                 }
             }
         }
     }
     int query(int l, int r) {
         int k = 31 - __builtin_clz(r-l+1);
-        return min(sparse[l][k], sparse[r-(1<<k)+1][k]);
+        return min(sparse[l][k], sparse[r-(1<<k)+1][k]); // change me
     }
 };
 
