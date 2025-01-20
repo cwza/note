@@ -1,10 +1,10 @@
 # Disjoint Set, Union Find
 
 ```cpp
-struct DST {
+struct DSU {
     vector<int> sz, lk;
     int total_sz;
-    DST(int n): sz(n), lk(n), total_sz(n) {
+    DSU(int n): sz(n), lk(n), total_sz(n) {
         for(int i = 0; i < n; i++) {
             sz[i] = 1;
             lk[i] = i;

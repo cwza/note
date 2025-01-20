@@ -1,4 +1,4 @@
-# Trie
+# Trie (Prefix Tree)
 * https://www.youtube.com/watch?v=MyiHeqtwOWQ
 ## Problem 1
 * https://leetcode.com/problems/implement-trie-prefix-tree/description/

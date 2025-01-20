@@ -28,7 +28,7 @@ long long modchoose(long long n, long long k, long long modN) {
 }
 ```
 
-## Precompute 1\~N! and mod_inv(1\~N!) in O(N), then query N choose K in O(1)
+## Precompute 1 to N! and mod_inv(1 to N!) in O(N), then query N choose K in O(1)
 - [CSES - Binomial Coefficients](https://cses.fi/problemset/task/1079)
 - fact[i] = fact[i-1]*i
 - fact_inv[i] = fact[i+1]*(i+1)
@@ -141,3 +141,24 @@ do{
     cout << endl;
 } while(next_permutation(inp.begin(), inp.end()));
 ```
+
+## Stars and Bars
+### Problem1: How many ways to put n objects into k bins, so that all bins contain at least one object. The bins are distinguished but the n objects are not 
+* How many ways of Xs, such that X1 + X2 + ... + Xk = N (Each X >= 1)
+* The answer is choose(N-1, K-1)
+* Consider we have N stars and K-1 Bars, we want to count the number of ways to put bars into these stars (The number of stars between each bar should be at least 1)
+    + Number of stars are Xs, and the Bars are the + signs
+    + Number of ways K-1 bars into N-1 positions
+    + `**|*|**|**`
+    + `*|**|***|*` ...
+### Problem2: How many ways to put n objects into k bins, you can put 0 object into one bin. The bins are distinguished but the n objects are not 
+* How many ways of Xs, such that X1 + X2 + ... + Xk = N (Each >= 0)
+* The answer is choose(N+K-1, K-1)
+* Consider we have N stars and K-1 Bars, we want to count the number of ways to put bars into these stars (The number of stars between each bar can be 0)
+    + Number of stars are Xs, and the Bars are the + signs
+    + We have N starr and K-1 Bars, Number of ways to permutate these objects
+    + (N+K-1)! / N!(K-1)! = choose(N+K-1, K-1) = choose(N+K-1, N)
+    + `**|*||**|**`
+    + `*|*****|*||` ...
+
+
