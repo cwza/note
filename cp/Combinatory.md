@@ -31,7 +31,8 @@ long long modchoose(long long n, long long k, long long modN) {
 ## Precompute 1 to N! and mod_inv(1 to N!) in O(N), then query N choose K in O(1)
 - [CSES - Binomial Coefficients](https://cses.fi/problemset/task/1079)
 - fact[i] = fact[i-1]*i
-- fact_inv[i] = fact[i+1]*(i+1)
+- fact_inv[i] = fact_inv[i+1]*(i+1)
+    + Because 1/i! = 1/(i+1)! * (i+1)
 ```cpp
 const int maxN = 1e6;
 const ll modN = 1e9+7;

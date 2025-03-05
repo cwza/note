@@ -1,10 +1,17 @@
-# Nim Game and Grundy Number
-* https://cp-algorithms.com/game_theory/sprague-grundy-nim.html
-* https://www.youtube.com/watch?v=zqWjEEFpKQE
+# Game Theory
+* Winning State: The one who start at this state will win the game. Losing State: The one who start at this state will lose the game.
+* Define winning or losing state for the last state
+* Winning state is the state that it can go to the losing state(At least one losing state for it to go). Losing state is the state that it can only go to the winning state(All states for it to go are winning states).
+    + Win -> Win (At least one outgoing is Lose)
+          -> Lose
+    + Lose -> Win (All outgoings are wins)
+           -> Win
 
 ## Basic Nim Game
 * N piles, each pile contains x1, x2, ..., xn balls, 2 players play this game, for each one need to remove at least one ball on one pile, who get the last ball wins, if they both act optimally, who wins?
 * Lose State: who at this state will lose <=> x1 xor x2 xor ... xor xn = 0
+* https://cp-algorithms.com/game_theory/sprague-grundy-nim.html
+* https://www.youtube.com/watch?v=zqWjEEFpKQE
 ``` cpp
 #include <bits/stdc++.h>
 using namespace std;
