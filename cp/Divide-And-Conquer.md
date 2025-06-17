@@ -1,5 +1,6 @@
 # Divide and Conquer
 ## Merge Sort
+* Time: O(n*logn)  Space: O(n)
 * Good Template for Many Divide and Conquer Problems
 ``` cpp
 #include <bits/stdc++.h>
