@@ -1,9 +1,26 @@
 # Sort
 * https://leetcode.com/problems/sort-an-array/
 
+## Insertion Sort
+* Time: O(n^2), Space(1)
+* Works perfect if your n is small
+``` cpp
+    vector<int> sortArray(vector<int>& nums) {
+        int n = nums.size();
+        if(n<=1) return nums;
+        for(int i = 1; i < n; i++) {
+            int j = i;
+            while(j-1>=0 && nums[j]<nums[j-1]) {
+                swap(nums[j], nums[j-1]);
+                j--;
+            }
+        }
+        return nums;
+    }
+```
+
 ## Merge Sort
-* Time: O(nlogn)
-* Space: O(n)
+* Time: O(nlogn), Space: O(n)
 ``` cpp
 // Merge Sort Iterative Version
 vector<int> sortArray(vector<int>& nums) {
@@ -61,8 +78,7 @@ vector<int> sortArray(vector<int>& nums) {
 
 ## Quick Sort
 * https://www.bilibili.com/video/BV1cc411F7Y6
-* Time: O(nlogn)
-* Space: O(logn) for the recursive depth
+* Time: O(nlogn), Space: O(logn) for the recursive depth
 ``` cpp
 vector<int> sortArray(vector<int>& nums) {
     auto rng = [](int start, int end) -> int {
@@ -204,6 +220,50 @@ vector<int> sortArray(vector<int>& nums) {
             size--;
             down(0, size);
         }
+        return nums;
+    }
+```
+
+## Radix Sort
+* https://www.bilibili.com/video/BV1Lh4y1c7Aw
+* Time: O(n), Space: O(base)
+* Only works for non-negative numbers
+``` cpp
+    vector<int> sortArray(vector<int>& nums) {
+        // only work for non-negative numbers
+        auto rsort = [](vector<int> &nums, int base) -> void {
+            int n = nums.size();
+            int mx = 0;
+            for(int i = 0; i < n; i++) mx = max(mx, nums[i]);
+            int round = 0;
+            while(mx>0) {
+                mx /= base;
+                round++;
+            }
+            vector<int> help(n);
+            vector<int> freq(base);
+            int div = 1;
+            while(round--) {
+                freq.clear();
+                freq.resize(base);
+                for(int i = 0; i < n; i++) freq[nums[i]/div%base]++;
+                for(int i = 1; i < base; i++) freq[i] += freq[i-1];
+                for(int i = n-1; i >= 0; i--) {
+                    help[freq[nums[i]/div%base]-1] = nums[i]; 
+                    freq[nums[i]/div%base]--;
+                }
+                for(int i = 0; i < n; i++) nums[i] = help[i];
+                div *= base;
+            }
+        };
+        // shift to make all the numbers be non-negative
+        int mn = 1e9;
+        int n = nums.size();
+        for(int i = 0; i < n; i++) mn = min(mn, nums[i]);
+        for(int i = 0; i < n; i++) nums[i] -= mn;
+        rsort(nums, 10);
+        // shift back
+        for(int i = 0; i < n; i++) nums[i] += mn;
         return nums;
     }
 ```
