@@ -16,6 +16,7 @@ cout << x << "\n";
 - (a−b)%M = (a%M−b%M+M)%M
 ``` cpp
 long long mod_minus(long long a, long long b, long long modN) {
+    // return (a%modN-b%modN+ModN)%modN;
     long long ret = a-b;
     while(ret<0) ret += modN;
     return ret;

@@ -22,10 +22,14 @@
 - gcd(a, b) = gcd(b, a%b) if b ≠ 0
 - Time Complexity: O( log(min(a, b)) )
     + a % b < a/2 if a >= b
+- lcm(a, b) = (a*b)/gcd(a,b);
 ```cpp
 int gcd(int a, int b) {
        if (b == 0) return a;
        return gcd(b, a%b);
+}
+ll lcm(int a, int b) {
+    return (ll)a/gcd(a, b)*b;
 }
 ```
 
