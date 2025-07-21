@@ -8,6 +8,13 @@ long long rng() {
 	    std::chrono::steady_clock::now().time_since_epoch().count());
 	return std::uniform_int_distribution<long long>(0, INT64_MAX)(gen);
 }
+
+// return a random integer between from and to
+long long rng(long long from, long long to) {
+	static std::mt19937 gen(
+	    std::chrono::steady_clock::now().time_since_epoch().count());
+	return std::uniform_int_distribution<long long>(from, to)(gen);
+}
 ```
 ## Shuffle an array
 ``` cpp
