@@ -8,6 +8,7 @@
 ## Minimum Size Subarray Sum
 * https://leetcode.com/problems/minimum-size-subarray-sum/description/
 * Find minimum size: calculate answer in while
+    + Think of this [T, T, T, T, T, T, F, F, F, F, F], you want to find the first False
 ``` cpp
 class Solution {
 public:
@@ -51,6 +52,7 @@ public:
 ## Longest Substring Without Repeating Characters
 * https://leetcode.com/problems/longest-substring-without-repeating-characters/
 * Find longest size: calculate answer out of while
+    + Think of this [F, F, F, F, F, F, T, T, T, T, T], you want to find the first True
 ``` cpp
 class Solution {
 public:
