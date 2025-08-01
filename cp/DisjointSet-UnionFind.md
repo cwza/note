@@ -4,10 +4,12 @@
 * Union Find is very useful to group nodes on un-directive graph (For directive graph use SCC)
 
 ## Implementation
-* Path Compression while find (The most important optimization, must do)
-* Union By Size while union(Size estimate tree height): small point to large (Optional optimization)
+* 2 Optimizations:
+    + Path Compression while find (The most important optimization, must do)
+    + Union By Size while union(Size estimate tree height): small point to large (Optional optimization)
 * https://www.nowcoder.com/practice/e7ed657974934a30b2010046536a5372
 * Use i==find(i) to check whether i is a leader node 
+* You can add some information to leader node, just like the sz array in following implementation.
 ```cpp
 // Implement 2 Optimization
 struct DSU {
@@ -24,15 +26,14 @@ struct DSU {
         lk[x] = find(lk[x]); //  path compression
         return lk[x];
     }
-    bool unite(int x, int y) {
+    void unite(int x, int y) {
         x = find(x);
         y = find(y);
-        if(x==y) return false;
+        if(x==y) return;
         if(sz[x]>sz[y]) swap(x, y); // sz[x] <= sz[y]
         lk[x] = y; // x -> y  // union by size
         sz[y] += sz[x];
         total_sz--;
-        return true;
     }
     int size(int x) {
         return sz[find(x)];
@@ -42,9 +43,9 @@ struct DSU {
 
 // Implement only Path Compression
 struct DSU {
-    vector<int> lk;
+    vector<int> lk, sz;
     int total_size;
-    DSU(int n): lk(n), total_size(n) {
+    DSU(int n): lk(n), sz(n, 1), total_size(n) {
         iota(lk.begin(), lk.end(), 0);
     }
     int find(int x) {
@@ -58,6 +59,7 @@ struct DSU {
         if(x!=y) {
             total_size--;
             lk[x] = y;
+            sz[y] += sz[x];
         }
     }
 };
