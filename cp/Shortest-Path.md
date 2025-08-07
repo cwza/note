@@ -15,21 +15,24 @@ vector<int> adj[maxN];
 int dist[maxN], parent[maxN];
  
 int main() {
+    queue<int> qu;
     fill(dist, dist+N, inf);
     dist[0] = 0;
     parent[0] = -1;
-    queue<int> qu;
     qu.push(0);
     while(qu.size()) {
+        // int sz = qu.size();
+        // for(int i = 0; i < sz; i++) {
         auto u = qu.front(); qu.pop();
-        if(dist[u]==inf) continue;
         for(int v : adj[u]) {
             if(dist[v]==inf) {
                 dist[v] = dist[u]+1;
+                // dist[v] is already correct and fixed at this moment
                 parent[v] = u;
                 qu.push(v);
             }
         }
+        // }
     }
 }
 ```
@@ -37,8 +40,9 @@ int main() {
 ## Dijkstra
 - Single source
 - Weight positive
-- O(VlogV+E) by Fibonacci Heap,   O(VlogV+ElogV)=O(ElogV) by Binary Heap
+- O(VlogV+E) by Fibonacci Heap,   O((V+E)logE)=O(ElogE) by Binary Heap
 - [CSES - Shortest Routes I](https://cses.fi/problemset/task/1671/)
+
 ```cpp
 const int maxN = 1e5;
 int n, m;
@@ -47,13 +51,17 @@ ll dist[maxN];
  
 int main() {
     fill(dist, dist+n, 1e18);
-    priority_queue<pair<ll,ll>, vector<pair<ll,ll>>, greater<pair<ll,ll>>> pq; // d, u
+    priority_queue<pair<ll,int>, vector<pair<ll,int>>, greater<pair<ll,int>>> pq; // d, u
     dist[0] = 0;
     pq.push({0, 0});
     while(pq.size()) {
         auto [d, u] = pq.top();
         pq.pop();
-        if(d > dist[u]) continue;
+        // Important!!! if you remove this line, you will get TLE. 
+        // Because there are a lot of same nodes will be pushed into pq.
+        // You need to ignore those invalid nodes
+        if(d > dist[u]) continue; 
+        // dist[u] is correct and fixed at this moment
         for(auto [v, w] : adj[u]) {
             if(dist[u] + w < dist[v]) {
                 dist[v] = dist[u] + w;
@@ -64,10 +72,11 @@ int main() {
 }
 ```
 
-## 0-1 Dijkstra(BFS)
+## 0-1 BFS (Very like Dijkstra)
 - Single source
 - Weight only 0 or 1
 - O(V+E)
+- https://leetcode.com/problems/minimum-obstacle-removal-to-reach-corner
 ```cpp
 const int maxN = 1e5;
 int n, m;
@@ -76,13 +85,16 @@ ll dist[maxN];
  
 int main() {
     fill(dist, dist+n, 1e18);
-    deque<pair<ll,ll>> dq; // d, u
+    deque<pair<ll,int>> dq; // d, u
     dist[0] = 0;
     dq.push_back({0, 0});
     while(dq.size()) {
         auto [d, u] = dq.front();
         dq.pop();
-        if(d > dist[u]) continue;
+        // Unlike dijkstra, this line can be removed and still not get TLE
+        // Because same nodes will only be pushed into deque at most 2 times for 0-1 graph
+        if(d > dist[u]) continue; 
+        // dist[u] is correct and fixed at this moment
         for(auto [v, w] : adj[u]) {
             if(dist[u] + w < dist[v]) {
                 dist[v] = dist[u] + w;
@@ -102,15 +114,18 @@ int main() {
 ## Floyd-Warshal
 - All pair
 - O(V^3)
+- Negative weight OK
+- No negative cycle
 - [CSES - Shortest Routes II](https://cses.fi/problemset/task/1672/)
 ```cpp
 const int maxN = 500;
 int n, m, q;
 ll d[maxN][maxN];
  
+const ll INF = 1e18;
 int main() 
     cin >> n >> m >> q;
-    fill(&d[0][0], &d[0][0]+maxN*maxN, 1e18);
+    fill(&d[0][0], &d[0][0]+maxN*maxN, INF);
     for(int i = 0; i < n; i++) d[i][i] = 0;
     for(int i = 0; i < m; i++) {
         int u, v, w;
@@ -120,10 +135,12 @@ int main()
         d[v][u] = min(d[v][u], ll(w));
     }
  
+    // Loop Order Matters!!!! Must loop k first!!!!
     for(int k = 0; k < n; k++) {
         for(int u = 0; u < n; u++) {
             for(int v = 0; v < n; v++) {
-                if(d[u][k] + d[k][v] < d[u][v]) {
+                if(d[u][k]==INF || d[k][v]==INF) continue;
+                if(d[u][k] + d[k][v] < d[u][v]) { // we can use k as middle point to make dist[i][j] less
                     d[u][v] = d[u][k] + d[k][v];
                 }
             }
@@ -133,19 +150,24 @@ int main()
 ```
 
 ## Bellman-Ford
+- Single source
 - O(V(V+E)) = O(VE)
 - Negative weight OK
-- Detect negative cycle
+- Detect negative cycle from start point
+    + How to detect if there are any negative cycle in a graph??? Set a super node that connect to all nodes with weight 0
+- Speed up (SPFA): Use a queue to store nodes that has been relaxed previous round, then at current round, only run those edges which start from these nodes
+    + In competition, this is not required
 - [CSES - High Score](https://cses.fi/problemset/task/1673/)
 ```cpp
 const int maxN = 2500;
 int n, m;
-vector<ar<ll, 3>> edges;
+vector<array<ll, 3>> edges;
 ll d[maxN];
+const ll INF = 1e18;
  
 int main() {
     cin >> n >> m;
-    fill(d, d+n, 1e18);
+    fill(d, d+n, INF);
     for(int i = 0; i < m; i++) {
         int u, v, w;
         cin >> u >> v >> w;
@@ -153,28 +175,29 @@ int main() {
         edges.push_back({u, v, -w});
     }
  
+    // Bellman-Ford
     d[0] = 0;
-    for(int i = 0; i < n; i++) {
+    for(int i = 0; i < n-1; i++) {
         for(auto [u, v, w] : edges) {
-            if(d[u] == 1e18) continue;
+            if(d[u] == INF) continue;
             if(d[v] > d[u] + w) {
                 d[v] = d[u] + w;
             }
         }
     }
  
+    // For each point v, check if it is on the cycle.
     for(int i = 0; i < n; i++) {
         for(auto [u, v, w] : edges) {
-            if(d[u] == 1e18) continue;
+            if(d[u] == INF) continue;
             if(d[v] > d[u] + w) {
-                d[v] = -1e18;
+                d[v] = -INF;
             }
         }
     }
     
-    if(d[n-1] == -1e18) cout << -1;
-    else cout << -d[n-1];
- 
+    if(d[n-1]==-INF) cout << "-1\n";
+    else cout << -d[n-1] << "\n";
 }
 ```
 
@@ -284,6 +307,7 @@ int main() {
         auto [d, u] = pq.top(); pq.pop();
         if(d>dist[u]) continue;
         for(auto [v, w] : adj[u]) {
+            // Important!!! Do not change the order, == must run befor <, because the < case will modify the dist[v]!!!!
             if(dist[u]+w==dist[v]) {
                 dp1[v] = (dp1[v]+dp1[u])%modN;
                 dp2[v] = min(dp2[v], dp2[u]+1);

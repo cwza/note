@@ -39,16 +39,16 @@ bool visited[maxN];
 int parent[maxN];
 
 void dfs(int u) {
-		stack<int> st;
-		st.push(u);
-		while(st.size()) {
-            u = st.top();
-            st.pop();
-            visited[u] = 1;
+    stack<int> st;
+    st.push(u);
+    while(st.size()) {
+        u = st.top();
+        st.pop();
+        visited[u] = 1;
         for(int v : adj[u]) {
             if(!visited[u]) {
-                parent[v] = u;
                 st.push(v);
+                parent[v] = u;
             }
         }
     }
@@ -60,8 +60,8 @@ int main() {
     
     for(int u = 0; u < n; u++) {
         if(!visited[u]) {
-				    dfs(u);
-				}
+            dfs(u);
+        }
     }
 }
 ```
@@ -79,20 +79,22 @@ int main() {
     cin.tie(0);
     
     queue<int> q;
+    visited[0] = 1;
+    parent[0] = -1;
     q.push(0);
 
     while(q.size()) {
-        //for(int i = 0; i < q.size(); i++) {
+        // int sz = q.size();
+        // for(int i = 0; i < sz; i++) {
         int u = q.front(); q.pop();
-        if(visited[v]) continue
-        visited[u] = 1;
         for(int v : adj[u]) {
             if(!visited[v]) {
+                visited[v] = 1;
                 parent[v] = u;
                 q.push(v);
             }
         }
-        //}
+        // }
     }
 }
 ```

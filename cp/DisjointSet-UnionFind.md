@@ -22,8 +22,7 @@ struct DSU {
         }
     }
     int find(int x) {
-        if(x==lk[x]) return x;
-        lk[x] = find(lk[x]); //  path compression
+        if(x!=lk[x]) lk[x] = self(self, lk[x]); // path compression
         return lk[x];
     }
     void unite(int x, int y) {
@@ -49,8 +48,7 @@ struct DSU {
         iota(lk.begin(), lk.end(), 0);
     }
     int find(int x) {
-        if(lk[x]==x) return x;
-        lk[x] = find(lk[x]);
+        if(x!=lk[x]) lk[x] = self(self, lk[x]);
         return lk[x];
     }
     void unite(int x, int y) {

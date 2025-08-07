@@ -1,95 +1,120 @@
 # Minimum Spanning Tree
-- [CSES - Road Reparation](https://cses.fi/problemset/task/1675/)
+* Un-directive weighted graph
+* Find a tree that has minimized sum of edges, and the graph still connected
+* MST is also a tree that minimize the maximum edge weight
+* N nodes graph:  minimum spanning tree N-1 edges
+    + If you find your tree edges less than n-1 after run the MST algorithm, this means the original graph is not connected
+* https://www.luogu.com.cn/problem/P3366  or https://cses.fi/problemset/task/1675/
 
-## Kruskal's Alg
-- O(ElogE)
+## Kruskal's Algorithm
+* O(ElogE) + O(V)
+* Algorithm:
+    + Sort edge list, process edges from small to large
+    + Use DST to check cycle, do not pick those edges which may form a cycle
+* Greedy point: pick the minimum edge from all edges
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
-using ll = long long; 
-struct DST {
-    vector<int> lk, sz;
-    DST(int n) {
-        lk.resize(n);
-        sz.resize(n, 1);
-        for(int i = 0; i < n; i++)  lk[i] = i;
-    }
-    int find(int a) {
-        while(lk[a]!=a) a = lk[a];
-        return a;
-    }
-    bool unite(int a, int b) {
-        a = find(a);
-        b = find(b);
-        if(a==b) return 0;
-        if(sz[a]>sz[b]) swap(a, b);
-        lk[a] = b;
-        sz[b] += sz[a];
-        return 1;
-    }
-};
- 
-int main() { 
-    int N, M;
-    cin >> N >> M;
-    vector<tuple<int,int,int>> edges(M);
-    for(int i = 0, u,v,w; i < M; i++) {
+#ifdef DEBUG
+    #include "./tool/debug.hpp"
+#else
+    #define dbg(...)
+    #define dbgarr(a)
+#endif
+using ll = long long;
+
+int main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+    int n, m;
+    cin >> n >> m;
+    vector<tuple<int, int, int>> edges(m); 
+    for(int i = 0, u, v, w; i < m; i++) {
         cin >> u >> v >> w;
-        u--; v--;
-        edges[i] = {w,u,v};
+        edges[i] = {w, u, v};
     }
     sort(edges.begin(), edges.end());
- 
-    auto dst = DST(N);
-    ll ans = 0;
-    int cnt = 0;
+
+    vector<int> lk(n+1);
+    iota(lk.begin(), lk.end(), 0);
+    auto find = [&](auto &&self, int x) -> int {
+        if(x!=lk[x]) lk[x] = self(self, lk[x]);
+        return lk[x];
+    };
+    auto unite = [&](int x, int y) -> bool {
+        x = find(find, x);
+        y = find(find, y);
+        if(x!=y) {
+            lk[x] = y;
+            return 1;
+        }
+        return 0;
+    };
+
+    int cnt = 0, ans = 0;
     for(auto [w, u, v] : edges) {
-        if(dst.unite(u, v)) {
-            ans += w;
+        if(unite(u, v)) {
             cnt++;
+            ans += w;
         }
     }
-    if(cnt!=N-1) cout << "IMPOSSIBLE";
-    else cout << ans;
+    if(cnt!=n-1) cout << "orz\n";
+    else cout << ans << "\n";
 }
 ```
 
-## Prim's Alg
-- O(ElogE)
+## Prim's Algorithm
+* O(ElogE) + O(V), Can be optimized to O(ElogV) + O(V), but in competetion this is not required
+* Algorithm:
+    + Use minimum priority queue to maintain the edges of all processed nodes
+    + Use set to check whether node is processed or not
+    + First start from any node, and push its edges to priority queue, add this node to proccessed set
+    + Repeatly do following: pull the minimum edge from priority queue, if it is not in proccessed set,  add its edges to priority queue, and add this node to proccessed set
+* This algorithm looks very like Dijkstra
+* Greedy point: Pick the minimum edge from processed node's edges
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
+#ifdef DEBUG
+    #include "./tool/debug.hpp"
+#else
+    #define dbg(...)
+    #define dbgarr(a)
+#endif
 using ll = long long;
- 
-const int maxN = 1e5;
-vector<pair<int,int>> adj[maxN];
-bool visited[maxN];
 
 int main() {
-    int N, M;
-    cin >> N >> M;
-    for(int i = 0, u,v,w; i < M; i++) {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+    int n, m;
+    cin >> n >> m;
+
+    vector<vector<pair<int,int>>> adj(n+1, vector<pair<int, int>>());
+    for(int i = 0, u, v, w; i < m; i++) {
         cin >> u >> v >> w;
-        u--; v--;
-        adj[u].push_back({w,v});
-        adj[v].push_back({w,u});
+        adj[u].push_back({w, v});
+        adj[v].push_back({w, u});
     }
 
-    priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
-    pq.push({0, 0});
-    ll ans = 0;
-    int cnt = 0;
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+    vector<int> vis(n+1);
+    for(auto [w, v] : adj[1]) pq.push({w, v});
+    vis[1] = 1;
+    int cnt = 1, ans = 0;
     while(pq.size()) {
-        auto [w, u] = pq.top(); pq.pop();
-        if(visited[u]) continue;
-        visited[u] = 1;
-        ans += w;
+        auto [wu, u] = pq.top();
+        pq.pop();
+        if(vis[u]) continue;
+        vis[u] = 1;
         cnt++;
-        for(auto [w, v] : adj[u]) {
-            if(!visited[v]) pq.push({w, v});
+        ans += wu;
+        for(auto [wv, v] : adj[u]) {
+            if(!vis[v]) pq.push({wv, v});
         }
     }
-    if(cnt!=N) cout << "IMPOSSIBLE";
-    else cout << ans;
+    if(cnt!=n) cout << "orz\n";
+    else cout << ans << "\n";
 }
 ```
