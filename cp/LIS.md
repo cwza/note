@@ -26,7 +26,7 @@ public:
 };
 ```
 
-## Solve by DP + Segment Tree(Range Max Query)
+## Solve by DP + Segment Tree(Range Max Query), O(nlogn)
 - The key of our segment tree is the value of the origin array. (Because we only want to query the one which is smaller than current), the value in the segment tree is just the dp value same as above.
 - We must use coordinate compress to compress the original array value from maxX(1e9) → maxN(1e6), to that we can store it in our segment tree(array)
 ```cpp
