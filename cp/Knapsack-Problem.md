@@ -192,7 +192,7 @@ int main() {
 * Dependency
     + Pull:     
     ```
-   \[i-1, j-cnt*cost]  ...   [i-1, j-2*cost]       [i-1, j-cost]         [i-1, j]
+    [i-1, j-cnt*cost]  ...   [i-1, j-2*cost]       [i-1, j-cost]         [i-1, j]
             |                       |                    |                   |
             v                       v                    v                   v
             -------------------------------------------------------------->[i, j]
@@ -270,7 +270,7 @@ int main() {
 }
 ```
 ### Monotonic Deque Optimization
-* Group by modulo and use monotonic deque to quickly find sliding window maximum
+* Group by modulo of cost and use monotonic deque to quickly find sliding window maximum
 * Time Complexity: `O(n*m)`
 * https://www.bilibili.com/video/BV1Nz4y1c71M/
 ``` cpp
@@ -284,6 +284,9 @@ int solve2(int n, int m, vector<int> &val, vector<int> &cost, vector<int> &cnt) 
         for(int mod = 0; mod < cost[i]; mod++) {
             deque<int> dq;
             for(int j = m-mod; j >= 0; j -= cost[i]) {
+                /*
+                 * [j-cnt*cost] ... [j-2*cost]  [j-cost]   [j]
+                */
                 if(j==m-mod) {
                     for(int k = j; k >= 0 && k>=j-cnt[i]*cost[i]; k -= cost[i]) {
                         while(dq.size() && get_value(i, dq.back())<=get_value(i, k)) dq.pop_back();
