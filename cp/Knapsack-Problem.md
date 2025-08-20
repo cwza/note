@@ -269,9 +269,91 @@ int main() {
     cout << dp[m] << "\n";
 }
 ```
-### Group by Modulo and Monotonic Deque Optimization
+### Monotonic Deque Optimization
+* Group by modulo and use monotonic deque to quickly find sliding window maximum
 * Time Complexity: `O(n*m)`
 * https://www.bilibili.com/video/BV1Nz4y1c71M/
+``` cpp
+// This is the solution from https://www.bilibili.com/video/BV1Nz4y1c71M/
+int solve2(int n, int m, vector<int> &val, vector<int> &cost, vector<int> &cnt) {
+    vector<int> dp(m+1);
+    auto get_value = [&](int i, int j) -> int {
+        return dp[j]-j/cost[i]*val[i];
+    };
+    for(int i = 0; i < n; i++) {
+        for(int mod = 0; mod < cost[i]; mod++) {
+            deque<int> dq;
+            for(int j = m-mod; j >= 0; j -= cost[i]) {
+                if(j==m-mod) {
+                    for(int k = j; k >= 0 && k>=j-cnt[i]*cost[i]; k -= cost[i]) {
+                        while(dq.size() && get_value(i, dq.back())<=get_value(i, k)) dq.pop_back();
+                        dq.push_back(k);
+                    }
+                } else {
+                    while(dq.size() && dq.front()>j) dq.pop_front();
+                    if(j-cnt[i]*cost[i]>=0) {
+                        while(dq.size() && get_value(i, dq.back())<= get_value(i, j-cnt[i]*cost[i])) dq.pop_back();
+                        dq.push_back(j-cnt[i]*cost[i]);
+                    }
+                }
+                assert(dq.size());
+                dp[j] = get_value(i, dq.front())+j/cost[i]*val[i];
+            }
+        }
+    }
+    return dp[m];
+}
+
+// This is the solution from me
+int solve3(int n, int m, vector<int> &val, vector<int> &cost, vector<int> &cnt) {
+    vector<int> dp(m+1);
+    auto get_value = [&](int i, int j, int right_j) -> int {
+        /*                                         dp[j]+k*val
+         * dp[right_j-cnt*cost]+cnt*val, ... dp[right_j-k*cost]+k*val, ... dp[right_j-2*cost]+2*val,  dp[right_j-cost]+1*val,   dp[right_j]+0*val
+         * right_j-k*cost = j
+         * k = (right_j-j)/cost
+        */
+        return dp[j]+(right_j-j)/cost[i]*val[i];
+    };
+    for(int i = 0; i < n; i++) {
+        for(int mod = 0; mod < cost[i]; mod++) {
+            deque<int> dq; // Monotonic Deque to Maintain max_value at front
+            for(int j = m-mod; j >= 0; j -= cost[i]) {
+                /*
+                 * [j-cnt*cost] ... [j-2*cost]  [j-cost]   [j]
+                */
+                if(j==m-mod) {
+                    for(int k = j; k >= 0 && k>=j-cnt[i]*cost[i]; k -= cost[i]) {
+                        while(dq.size() && get_value(i, dq.back(), j)<=get_value(i, k, j)) dq.pop_back();
+                        dq.push_back(k);
+                    }
+                } else {
+                    while(dq.size() && dq.front()>j) dq.pop_front();
+                    if(j-cnt[i]*cost[i]>=0) {
+                        while(dq.size() && get_value(i, dq.back(), j)<= get_value(i, j-cnt[i]*cost[i], j)) dq.pop_back();
+                        dq.push_back(j-cnt[i]*cost[i]);
+                    }
+                }
+                assert(dq.size());
+                dp[j] = get_value(i, dq.front(), j);
+            }
+        }
+    }
+    return dp[m];
+}
+
+int main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+    int n, m;
+    cin >> n >> m;
+    vector<int> val(n), cost(n), cnt(n);
+    for(int i = 0; i < n; i++) cin >> val[i] >> cost[i] >> cnt[i];
+    cout << solve3(n, m, val, cost, cnt) << "\n";
+}
+
+```
 ### Combined
 * You can use 0/1 knapsack and unbounded knapsack method to speed up bounded knapsack
 ``` cpp
