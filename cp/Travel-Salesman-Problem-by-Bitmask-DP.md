@@ -52,10 +52,6 @@ int main() {
         }
     }
 
-    // for(int S = 0; S < 1<<n; S++) {
-    //     for(int i = 0; i < n; i++) cout << dp[S][i] << ",";
-    //     cout << endl;
-    // }
     cout << dp[(1<<n)-1][0];
 }
 ```
@@ -97,27 +93,27 @@ int main() {
 
     vector<vector<ll>> dp(1<<n, vector<ll>(n, inf));
     dp[1][0] = 0;
+    // dp[0][0] = 0;
 
     for(int i = 0; i < 1<<n; i++) {
         for(int j = 0; j < n; j++) {
             if(!(i&(1<<j))) continue;
+            // if(!(i&(1<<j)) && !(i==0&&j==0)) continue;
+            if(dp[i][j]==inf) continue;
             for(int k = 0; k < n; k++) {
                 if(i&(1<<k)) continue;
-                if(dp[i][j]==inf) continue;
+                if(cost[j][k]==inf) continue;
                 dp[i^(1<<k)][k] = min(dp[i^(1<<k)][k], dp[i][j]+cost[j][k]);
             }
         }
     }
-    // for(int i = 0; i < 1<<n; i++) {
-    //     for(int j = 0; j < n; j++) cout << dp[i][j] << " ";
-    //     cout << endl;
-    // }
 
     ll ans = inf;
-    for(int j = 0; j < n; j++) {
+    for(int j = 1; j < n; j++) {
         if(dp[(1<<n)-1][j]==inf) continue;
         ans = min(ans, dp[(1<<n)-1][j]+cost[j][0]);
     }
-    cout << ans;
+    cout << ans << "\n";
+    // cout << dp[(1<<n)-1][0] << "\n";
 }
 ```

@@ -76,3 +76,20 @@ struct Bitset {
     }
 };
 ```
+
+## Generate all subsets of a bit integer
+* Very useful for bitmask dp
+``` cpp
+/*
+status        = 1001100 = 76
+subsets of 76 = 1000000
+                0001000
+                0000100
+                1001000
+                1000100
+                0001100
+                1001100
+*/
+for(int j = status; j > 0; j = (j-1)&status) {} // include status
+for(int j = (status-1)&status; j > 0; j = (j-1)&status) {} // not include status
+```

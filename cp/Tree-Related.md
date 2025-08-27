@@ -328,8 +328,9 @@ int main() {
 * https://cses.fi/problemset/task/1137/
 * Key:
     + Use dfs start time as index in segment tree(or fenwick tree)
+    + dfn[i] : dfs start time of i
     + sz[i]: subtree size of i
-    + range sum of subtree i: range sum of [dfs_st[i], dfs_st[i]+sz[i]-1] in segment tree
+    + range sum of subtree i: range sum of [dfn[i], dfn[i]+sz[i]-1] in segment tree
 ``` cpp
 /*
 Idea from CPH
@@ -340,11 +341,11 @@ Idea from CPH
     3   4
  
             0 1 2 3 4 (original index)
-dfs_st      0 1 2 3 4 (index in segment tree)
+dfn         0 1 2 3 4 (index in segment tree)
 sz          5 1 3 1 1
 value       4 2 5 2 1
 
-sum of subtree at i = sum in range [dfs_st[i], dfs_st[i]+sz[i]-1]
+sum of subtree at i = sum in range [dfn[i], dfn[i]+sz[i]-1]
 */
 
 

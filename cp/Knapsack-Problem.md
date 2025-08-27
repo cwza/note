@@ -81,6 +81,15 @@ int main() {
 ```
 ### Grouped
 * In each group, you can only take one item from group or just take no item from this group (i.e. you can not take 2 or more items from the same group)
+* Pay attention on the loop order!!!!
+``` cpp
+for(auto& [_, items] : group_items) { // loop over each group
+    for(int j = m; j >= 0; j--) { // loop over all cost
+        for(int k : items) { // loop over items in each group
+        }
+    }
+}
+```
 * https://www.luogu.com.cn/problem/P1757
 ``` cpp
 int main() {
