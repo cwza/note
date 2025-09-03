@@ -201,7 +201,7 @@ int main() {
     // print the LIS length
     cout << end.size() << "\n";
 
-    // print the LIS sequence
+    // print the LIS sequence if multiple then print the one which has the smallest lexicographical order
     int cur = end.size();
     vector<int> ans;
     for(int i = n-1; i >= 0; i--) {
@@ -214,6 +214,18 @@ int main() {
     for(int i = 0; i < (int)ans.size(); i++) cout << ans[i] << " ";
     cout << "\n";
 
+    // // print the LIS sequence if multiple then print the one which has the largest lexicographical order
+    // int cur = 0;
+    // vector<int> ans;
+    // for(int i = 0; i < n; i++) {
+    //     if(len[i]==cur) {
+    //         ans.push_back(a[i]);
+    //         cur++;
+    //     }
+    // }
+    // reverse(ans.begin(), ans.end());
+    // for(int i = 0; i < (int)ans.size(); i++) cout << ans[i] << " ";
+    // cout << "\n";
 }
 ```
 
