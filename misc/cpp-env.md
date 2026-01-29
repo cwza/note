@@ -5,7 +5,7 @@
 ## Competitive Programming Tool Shell Script
 * Easy to compile cpp file
 * `./tool/cpt`
-* Better to put this file to your system path 
+* Put this file to your system path or just use soft link ex: `ln -s ./tool/cpt ~/.local/bin/cpt`
 ``` sh
 #!/bin/bash
 
@@ -31,6 +31,14 @@ if [ $optimize -eq 0 ]; then
 else
     g++ "$filename.cpp" -o "$filename" -std=c++$version -O2 -fmax-errors=2
 fi
+
+# # for mac, fsanitize is not supported for mac arm64 so we need to remove it from compile flag
+# # also remember to replace g++-15 to the actual version you installed
+# if [ $optimize -eq 0 ]; then
+#     g++-15 "$filename.cpp" -o "$filename" -std=c++$version -Wall -Wextra -Wshadow -Wfloat-equal -D_GLIBCXX_DEBUG -D_GLIBCXX_ASSERTIONS -DDEBUG -fmax-errors=2
+# else
+#     g++-15 "$filename.cpp" -o "$filename" -std=c++$version -O2 -fmax-errors=2
+# fi
 ```
 
 ## Competitive Programming Debug Tool

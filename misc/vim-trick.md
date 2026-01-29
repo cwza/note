@@ -1,5 +1,6 @@
 # Vim Trick
 ## Shortcut
+- visual mode to select multiple lines, then :norm I[] to add something to the beginning, also you can use :norm A[] to add something to the end
 - Visual mode press U: Upper case, u: Lower case , Normal or Visual mode press ~: Toggle case
 - V=: to select and indent
 - Ctrl-E, Ctrl-Y: Scroll without move cursor
@@ -15,14 +16,17 @@
 - gUw: upper case a word, guw: lower case a word
 - vi(: select all words inside(),  va(: select all words inside() include (),  i is for inside, a is for around
 - %: match parenthesis, bracket
-- qa[]q: to make a macro to register a,  @a to do the macro in register a, you can use . to repeat
 - Ctrl-o: press this in insert mode will let you back to normal mode once and return insert mode.
 - Ctrl-w: press this in insert mode will delete the previous word.
 - S: go to auto indent position
-- visual mode to select multiple lines, then :norm I[] to add something to the beginning, also you can use :norm A[] to add something to the end
 - visual mode to select multiple lines, then :! sort | uniq will run sort and uniq on what you select
 - insert mode press C-r then "(or other register) to paste in insert mode
 - :%s/xx/yy/g: replace all xx with yy,  :%s/xx/yy/gc: ask for confirm, %s/xx/yy/gi: ignore case
+- :cd %:h change pwd to the directory of current file
+
+## Macro
+- qa[]q: to make a macro to register a
+- @a to do the macro in register a, you can use . to repeat
 
 ## Surround
 - ys[iw]" to surround a word by "
@@ -39,3 +43,26 @@
     + this will replace all xxx to ooo for each entry in this quickfix list
     + c is for confirm
     + use :cfdo to do only once for each file
+
+## Marks
+- mA, mS, or mD to mark file
+- 'A, 'S, or 'D to go to that file
+
+## NetRW
+- :Ex :Vex :Hex to open netrw in current window
+- :Lex to open netrw to the left window
+- :Rex to close netrw
+- P to open file in previously used window
+- o to open file in new window, v to open file in vertically new window
+- % to create file
+- d to create directory
+- D to delete file
+- R to move file
+- mf to mark file
+- mt to mark target directory
+- mm to move marked files to target directory
+- mc to copy marked files to target directory
+- i to change layout
+- I to toggle banner
+- gh to toggle hidden files
+- gn to change the tree view root to current cursor directory
