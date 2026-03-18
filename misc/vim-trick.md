@@ -3,6 +3,7 @@
 - visual mode to select multiple lines, then :norm I[] to add something to the beginning, also you can use :norm A[] to add something to the end
 - Visual mode press U: Upper case, u: Lower case , Normal or Visual mode press ~: Toggle case
 - V=: to select and indent
+- g_: go to the end of line (not include newline), ^vg_: select whole line without head, tail spaces and newline
 - Ctrl-E, Ctrl-Y: Scroll without move cursor
 - Ctrl-a, Ctrl-x: increase decrease number
 - f, F, t, T: find or to next character
