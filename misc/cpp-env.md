@@ -27,17 +27,17 @@ fi
 # echo "version=$version"
 
 if [ $optimize -eq 0 ]; then
-    g++ "$filename.cpp" -o "$filename" -std=c++$version -Wall -Wextra -Wshadow -Wfloat-equal -D_GLIBCXX_DEBUG -D_GLIBCXX_ASSERTIONS -DDEBUG -fsanitize=undefined -fmax-errors=2
+    g++ "$filename.cpp" -o "$filename".exe -std=c++$version -Wall -Wextra -Wshadow -Wfloat-equal -D_GLIBCXX_DEBUG -D_GLIBCXX_ASSERTIONS -DDEBUG -fsanitize=undefined -fmax-errors=2
 else
-    g++ "$filename.cpp" -o "$filename" -std=c++$version -O2 -fmax-errors=2
+    g++ "$filename.cpp" -o "$filename".exe -std=c++$version -O2 -fmax-errors=2
 fi
 
 # # for mac, fsanitize is not supported for mac arm64 so we need to remove it from compile flag
 # # also remember to replace g++-15 to the actual version you installed
 # if [ $optimize -eq 0 ]; then
-#     g++-15 "$filename.cpp" -o "$filename" -std=c++$version -Wall -Wextra -Wshadow -Wfloat-equal -D_GLIBCXX_DEBUG -D_GLIBCXX_ASSERTIONS -DDEBUG -fmax-errors=2
+#     g++-15 "$filename.cpp" -o "$filename".exe -std=c++$version -Wall -Wextra -Wshadow -Wfloat-equal -D_GLIBCXX_DEBUG -D_GLIBCXX_ASSERTIONS -DDEBUG -fmax-errors=2
 # else
-#     g++-15 "$filename.cpp" -o "$filename" -std=c++$version -O2 -fmax-errors=2
+#     g++-15 "$filename.cpp" -o "$filename".exe -std=c++$version -O2 -fmax-errors=2
 # fi
 ```
 
